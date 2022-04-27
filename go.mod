@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/che-kwas/iam-kit v0.0.0-20220427083956-ca6cd9d0aaeb
 	github.com/sirupsen/logrus v1.8.1
+	github.com/spf13/pflag v1.0.5
 )
 
 require (
@@ -29,7 +30,6 @@ require (
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.11.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect

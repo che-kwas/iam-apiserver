@@ -4,15 +4,25 @@ package main
 
 import (
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/pflag"
 
 	"iam-apiserver/internal/apiserver"
 )
 
-func main() {
-	// TODO get cfgFile from flags
-	cfgFile := ""
+var (
+	name = "iam-apiserver"
+	cfg  = pflag.StringP("config", "c", "./iam-apiserver.yaml", "config file")
+	help = pflag.BoolP("help", "h", false, "show help message")
+)
 
-	server, err := apiserver.NewServer("iam-apiserver", cfgFile)
+func main() {
+	pflag.Parse()
+	if *help {
+		pflag.Usage()
+		return
+	}
+
+	server, err := apiserver.NewServer(name, *cfg)
 	if err != nil {
 		log.Fatal("Build server error: ", err)
 	}
