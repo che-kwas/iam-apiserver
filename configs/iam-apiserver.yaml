@@ -1,0 +1,11 @@
+http:
+  address: ${IAM_APISERVER_HTTP_ADDRESS} # 默认 0.0.0.0:8000
+  mode: debug # release, debug, test，默认 release
+  healthz: true # 是否开启健康检查, router: /healthz，默认 true
+  metrics: false # 是否开启 metrics, router: /metrics，默认 false
+  profiling: false # 是否开启性能分析, router: /debug/pprof，默认 false
+  ping-timeout: 10s # http 服务启动后，自检超时时间，默认 10s
+
+grpc:
+  address: ${IAM_APISERVER_GRPC_ADDRESS} # 默认 0.0.0.0:8001
+  max-msg-size: 4194304 # 4mb
