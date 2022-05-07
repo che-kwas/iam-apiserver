@@ -18,11 +18,12 @@ include make-rules/tools.mk
 
 ## all: Build all.
 .PHONY: all
-all: tools lint test build
+all: lint test build
 
 ## lint: Check syntax and styling of go sources.
 .PHONY: lint
 lint: tools.verify.golangci-lint
+	go mod tidy -compat=1.17
 	golangci-lint run ./...
 
 ## test: Run unit test.
@@ -34,24 +35,18 @@ test:
 ## cover: Run unit test and get test coverage.
 .PHONY: cover
 cover: test
-	sed -i '/.*_mock.go/d' $(OUTPUT_DIR)/coverage.out
+	sed -i '/mock_.*.go/d' $(OUTPUT_DIR)/coverage.out
 	go tool cover -html=$(OUTPUT_DIR)/coverage.out -o $(OUTPUT_DIR)/coverage.html
 
 ## build: Build source code for host platform.
 .PHONY: build
 build:
-	go mod tidy -compat=1.17
 	go build -ldflags "$(GO_LDFLAGS)" -o $(OUTPUT_DIR)/ ./...
 
 ## clean: Remove all files that are created by building.
 .PHONY: clean
 clean:
 	-rm -vrf $(OUTPUT_DIR)
-
-## tools: Install dependent tools.
-.PHONY: tools
-tools:
-	make tools.verify
 
 ## help: Show help info.
 .PHONY: help
