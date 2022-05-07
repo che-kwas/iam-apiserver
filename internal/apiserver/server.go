@@ -8,5 +8,6 @@ func NewServer(name string, cfgFile string) (*server.Server, error) {
 		return nil, err
 	}
 
+	s.InitRouter(initRouter)
 	return s, nil
 }
