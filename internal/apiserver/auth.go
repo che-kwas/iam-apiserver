@@ -67,7 +67,7 @@ func newJWTAuth() middleware.AuthStrategy {
 		IdentityKey:      middleware.UsernameKey,
 		Authorizator:     authorizator(),
 		Unauthorized:     unauthorizedHandler(),
-		TokenLookup:      "header: Authorization, query: token, cookie: jwt",
+		TokenLookup:      "header: Authorization",
 		TokenHeadName:    "Bearer",
 		SendCookie:       true,
 		TimeFunc:         time.Now,

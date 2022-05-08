@@ -14,3 +14,13 @@ jwt:
   key: dfVpOK8LZeJLZHYmHdb1VdyRrACKpqoo # 服务端密钥
   timeout: 24h # token 过期时间(小时)
   max-refresh: 24h # token 更新时间(小时)
+
+mysql:
+  host: ${IAM_MYSQL_HOST} # 默认 127.0.0.1:3306
+  username: ${IAM_MYSQL_USERNAME}
+  password: ${IAM_MYSQL_PASSWORD}
+  database: ${IAM_MYSQL_DATABASE}
+  max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
+  max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
+  max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
+  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info

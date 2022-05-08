@@ -12,4 +12,13 @@ curl -X GET http://localhost:8000/healthz
 {"status":"OK"}
 ```
 
-###
+### 登录
+
+```sh
+# request
+curl -X POST http://localhost:8000/login \
+    -H "Authorization: Basic dGVzdDo3NzQ0MTEK"
+
+# response
+{"status":"OK"}
+```
