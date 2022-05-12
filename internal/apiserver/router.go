@@ -2,8 +2,8 @@ package apiserver
 
 import (
 	"github.com/che-kwas/iam-kit/errcode"
+	"github.com/che-kwas/iam-kit/httputil"
 	"github.com/che-kwas/iam-kit/middleware/auth"
-	"github.com/che-kwas/iam-kit/util"
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/errors"
 )
@@ -20,6 +20,6 @@ func initRouter(g *gin.Engine) {
 
 func notFound() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		util.WriteResponse(c, errors.WithCode(errcode.ErrNotFound, "Not found."), nil)
+		httputil.WriteResponse(c, errors.WithCode(errcode.ErrNotFound, "Not found."), nil)
 	}
 }

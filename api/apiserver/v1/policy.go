@@ -3,8 +3,8 @@ package v1
 import (
 	"encoding/json"
 
+	"github.com/che-kwas/iam-kit/db"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
-	"github.com/che-kwas/iam-kit/util"
 	"github.com/ory/ladon"
 	"gorm.io/gorm"
 )
@@ -50,7 +50,7 @@ func (p *Policy) BeforeCreate(tx *gorm.DB) error {
 
 // AfterCreate runs after create database record.
 func (p *Policy) AfterCreate(tx *gorm.DB) error {
-	p.InstanceID = util.GetInstanceID(p.ID, "policy-")
+	p.InstanceID = db.GetInstanceID(p.ID, "policy-")
 
 	return tx.Save(p).Error
 }
