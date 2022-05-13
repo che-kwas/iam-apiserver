@@ -2,10 +2,10 @@ package store
 
 //go:generate mockgen -self_package=iam-apiserver/internal/apiserver/store -destination mock_store.go -package store iam-apiserver/internal/apiserver/store Factory,UserStore,SecretStore,PolicyStore
 
-var client Factory
+var client Store
 
-// Factory defines the apiserver storage interface.
-type Factory interface {
+// Store defines the apiserver storage interface.
+type Store interface {
 	Users() UserStore
 	Secrets() SecretStore
 	Policies() PolicyStore
@@ -13,11 +13,11 @@ type Factory interface {
 }
 
 // Client return the store client.
-func Client() Factory {
+func Client() Store {
 	return client
 }
 
 // SetClient set the store client.
-func SetClient(factory Factory) {
-	client = factory
+func SetClient(store Store) {
+	client = store
 }

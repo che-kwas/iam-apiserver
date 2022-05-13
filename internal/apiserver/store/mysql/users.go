@@ -60,7 +60,7 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 // Get return an user by the username.
 func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
 	user := &v1.User{}
-	err := u.db.Where("username = ?", username).First(&user).Error
+	err := u.db.Where("username = ? and isActive", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.WithCode(errcode.ErrNotFound, err.Error())
@@ -77,7 +77,7 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 	ret := &v1.UserList{}
 	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
 
-	d := u.db.
+	d := u.db.Where("isActive").
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").

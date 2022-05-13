@@ -38,21 +38,21 @@ func (ds *datastore) Close() error {
 }
 
 var (
-	mysqlFactory store.Factory
-	once         sync.Once
+	mysqlStore store.Store
+	once       sync.Once
 )
 
-// GetMySQLFactory gets/creats a mysql factory.
-func GetMySQLFactory() (store.Factory, error) {
-	if mysqlFactory != nil {
-		return mysqlFactory, nil
+// GetMySQLStore gets/creats a mysql store.
+func GetMySQLStore() (store.Store, error) {
+	if mysqlStore != nil {
+		return mysqlStore, nil
 	}
 
 	var err error
 	var dbIns *gorm.DB
 	once.Do(func() {
 		dbIns, err = db.NewDBBuilder().Build()
-		mysqlFactory = &datastore{dbIns}
+		mysqlStore = &datastore{dbIns}
 	})
 
 	if err != nil {
@@ -60,7 +60,7 @@ func GetMySQLFactory() (store.Factory, error) {
 	}
 
 	migrateDatabase(dbIns)
-	return mysqlFactory, nil
+	return mysqlStore, nil
 }
 
 func migrateDatabase(db *gorm.DB) error {
