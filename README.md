@@ -1,3 +1,5 @@
+[![CI](https://github.com/che-kwas/iam-apiserver/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/che-kwas/iam-apiserver/actions/workflows/ci.yaml)
+
 # iam-apiserver
 
 ## 测试
