@@ -3,8 +3,8 @@ package mysql
 import (
 	"context"
 
+	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	"github.com/che-kwas/iam-kit/errcode"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
@@ -34,7 +34,7 @@ func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.Upd
 func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	err := s.db.Where("username = ? and name = ?", username, name).Delete(&v1.Secret{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil
@@ -56,10 +56,10 @@ func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.Ge
 	err := s.db.Where("username = ? and name= ?", username, name).First(&secret).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(errcode.ErrNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(errcode.ErrDatabase, err.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return secret, nil

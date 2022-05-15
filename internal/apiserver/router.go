@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"iam-apiserver/internal/apiserver/store"
 
-	"github.com/che-kwas/iam-kit/errcode"
+	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/httputil"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/che-kwas/iam-kit/middleware"
@@ -44,7 +44,7 @@ func initRouter(g *gin.Engine) {
 
 func notFound() func(c *gin.Context) {
 	return func(c *gin.Context) {
-		httputil.WriteResponse(c, errors.WithCode(errcode.ErrNotFound, "Not found."), nil)
+		httputil.WriteResponse(c, errors.WithCode(code.ErrNotFound, "Not found."), nil)
 	}
 }
 
@@ -64,7 +64,7 @@ func isAdmin() gin.HandlerFunc {
 			msg = fmt.Sprintf("user %s is not a administrator", username)
 		}
 
-		httputil.WriteResponse(c, errors.WithCode(errcode.ErrPermissionDenied, msg), nil)
+		httputil.WriteResponse(c, errors.WithCode(code.ErrPermissionDenied, msg), nil)
 		c.Abort()
 		return
 	}

@@ -1,6 +1,6 @@
 # Makefile helper functions for tools
 
-TOOLS := golangci-lint mockgen
+TOOLS := golangci-lint mockgen codegen
 
 .PHONY: tools.verify
 tools.verify: $(addprefix tools.verify., $(TOOLS))
@@ -20,3 +20,7 @@ install.golangci-lint:
 .PHONY: install.mockgen
 install.mockgen:
 	go install github.com/golang/mock/mockgen@latest
+
+.PHONY: install.codegen
+install.codegen:
+	go install github.com/che-kwas/iam-kit/tools/codegen@latest

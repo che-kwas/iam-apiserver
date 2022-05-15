@@ -7,8 +7,8 @@ package mysql
 import (
 	"context"
 
+	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	"github.com/che-kwas/iam-kit/errcode"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
@@ -38,7 +38,7 @@ func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.Up
 func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
 	err := p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil
@@ -70,10 +70,10 @@ func (p *policies) Get(ctx context.Context, username, name string, opts metav1.G
 	err := p.db.Where("username = ? and name = ?", username, name).First(&policy).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(errcode.ErrNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(errcode.ErrDatabase, err.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return policy, nil

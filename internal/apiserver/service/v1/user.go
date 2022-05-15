@@ -4,7 +4,7 @@ import (
 	"context"
 	"regexp"
 
-	"github.com/che-kwas/iam-kit/errcode"
+	"github.com/che-kwas/iam-kit/code"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 
@@ -37,10 +37,10 @@ func (u *userService) Create(ctx context.Context, user *v1.User, opts metav1.Cre
 	if err := u.store.Users().Create(ctx, user, opts); err != nil {
 		if match, _ := regexp.MatchString("Duplicate entry '.*' for key 'idx_name'", err.Error()); match {
 			// TODO define api-server errors
-			return errors.WithCode(errcode.ErrDatabase, err.Error())
+			return errors.WithCode(code.ErrDatabase, err.Error())
 		}
 
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil

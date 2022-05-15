@@ -3,8 +3,8 @@ package mysql
 import (
 	"context"
 
+	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	"github.com/che-kwas/iam-kit/errcode"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
@@ -40,7 +40,7 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 
 	err := u.db.Where("username = ?", username).Delete(&v1.User{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.WithCode(errcode.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil
@@ -63,10 +63,10 @@ func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions
 	err := u.db.Where("username = ? and isActive", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(errcode.ErrNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(errcode.ErrDatabase, err.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return user, nil
