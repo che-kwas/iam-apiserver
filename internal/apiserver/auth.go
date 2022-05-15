@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -13,7 +14,6 @@ import (
 	"github.com/che-kwas/iam-kit/middleware"
 	"github.com/che-kwas/iam-kit/middleware/auth"
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
 	v1 "iam-apiserver/api/apiserver/v1"
@@ -89,12 +89,12 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 
 		user, err := store.Client().Users().Get(c, login.Username, metav1.GetOptions{})
 		if err != nil {
-			log.Error("Authentication failed: username error.")
+			log.Print("Authentication failed: username error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
 		if err := user.ComparePassword(login.Password); err != nil {
-			log.Error("Authentication failed: password error.")
+			log.Print("Authentication failed: password error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
@@ -169,7 +169,7 @@ func identityHandler() func(c *gin.Context) interface{} {
 func authorizator() func(data interface{}, c *gin.Context) bool {
 	return func(data interface{}, c *gin.Context) bool {
 		if v, ok := data.(string); ok {
-			log.Infof("user `%s` is authenticated.", v)
+			log.Printf("user `%s` is authenticated.", v)
 
 			return true
 		}
