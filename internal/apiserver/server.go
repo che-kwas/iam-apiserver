@@ -1,11 +1,11 @@
 package apiserver
 
 import (
-	"iam-apiserver/internal/apiserver/store"
-	"iam-apiserver/internal/apiserver/store/mysql"
-
 	"github.com/che-kwas/iam-kit/config"
 	"github.com/che-kwas/iam-kit/server"
+
+	"iam-apiserver/internal/apiserver/store"
+	"iam-apiserver/internal/apiserver/store/mysql"
 )
 
 func NewServer(name string, cfgFile string) (*server.Server, error) {

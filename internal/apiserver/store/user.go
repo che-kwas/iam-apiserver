@@ -3,9 +3,9 @@ package store
 import (
 	"context"
 
-	v1 "iam-apiserver/api/apiserver/v1"
-
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+
+	v1 "iam-apiserver/api/apiserver/v1"
 )
 
 // UserStore defines the user storage interface.

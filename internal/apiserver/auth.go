@@ -8,9 +8,6 @@ import (
 	"strings"
 	"time"
 
-	v1 "iam-apiserver/api/apiserver/v1"
-	"iam-apiserver/internal/apiserver/store"
-
 	ginjwt "github.com/appleboy/gin-jwt/v2"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/che-kwas/iam-kit/middleware"
@@ -18,6 +15,9 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+
+	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/apiserver/store"
 )
 
 const JWTIssuer = "iam-apiserver"

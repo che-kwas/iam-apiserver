@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"sync"
 
-	v1 "iam-apiserver/api/apiserver/v1"
-	"iam-apiserver/internal/apiserver/store"
-
 	"github.com/che-kwas/iam-kit/db"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
+
+	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/apiserver/store"
 )
 
 type datastore struct {

@@ -3,13 +3,13 @@ package mysql
 import (
 	"context"
 
-	v1 "iam-apiserver/api/apiserver/v1"
-
 	"github.com/che-kwas/iam-kit/db"
 	"github.com/che-kwas/iam-kit/errcode"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
+
+	v1 "iam-apiserver/api/apiserver/v1"
 )
 
 type secrets struct {

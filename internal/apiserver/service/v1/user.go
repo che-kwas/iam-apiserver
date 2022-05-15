@@ -4,12 +4,12 @@ import (
 	"context"
 	"regexp"
 
-	v1 "iam-apiserver/api/apiserver/v1"
-	"iam-apiserver/internal/apiserver/store"
-
 	"github.com/che-kwas/iam-kit/errcode"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
+
+	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/apiserver/store"
 )
 
 // UserSrv defines functions used to handle user request.
