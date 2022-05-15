@@ -1,19 +1,16 @@
-// Copyright 2020 Lingfei Kong <colin404@foxmail.com>. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package mysql
 
 import (
 	"context"
 
-	"github.com/che-kwas/iam-kit/code"
+	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/pkg/code"
 )
 
 type policies struct {
@@ -26,42 +23,11 @@ func newPolicies(ds *datastore) *policies {
 
 // Create creates a new ladon policy.
 func (p *policies) Create(ctx context.Context, policy *v1.Policy, opts metav1.CreateOptions) error {
-	return p.db.Create(&policy).Error
-}
-
-// Update updates the policy.
-func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
-	return p.db.Save(policy).Error
-}
-
-// Delete deletes the policy by the policy identifier.
-func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
-	err := p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.WithCode(code.ErrDatabase, err.Error())
+	if err := p.db.Create(&policy).Error; err != nil {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
 	return nil
-}
-
-// DeleteByUser deletes policies by username.
-func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav1.DeleteOptions) error {
-	return p.db.Where("username = ?", username).Delete(&v1.Policy{}).Error
-}
-
-// DeleteCollection batch deletes policies by policies ids.
-func (p *policies) DeleteCollection(
-	ctx context.Context,
-	username string,
-	names []string,
-	opts metav1.DeleteOptions,
-) error {
-	return p.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Policy{}).Error
-}
-
-// DeleteCollectionByUser batch deletes policies usernames.
-func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
-	return p.db.Where("username in (?)", usernames).Delete(&v1.Policy{}).Error
 }
 
 // Get returns the policy by the policy identifier.
@@ -70,13 +36,22 @@ func (p *policies) Get(ctx context.Context, username, name string, opts metav1.G
 	err := p.db.Where("username = ? and name = ?", username, name).First(&policy).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrPolicyNotFound, err.Error())
 		}
 
-		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
 	return policy, nil
+}
+
+// Update updates the policy.
+func (p *policies) Update(ctx context.Context, policy *v1.Policy, opts metav1.UpdateOptions) error {
+	if err := p.db.Save(policy).Error; err != nil {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
 }
 
 // List returns all policies.
@@ -88,14 +63,63 @@ func (p *policies) List(ctx context.Context, username string, opts metav1.ListOp
 		p.db = p.db.Where("username = ?", username)
 	}
 
-	d := p.db.
+	err := p.db.
 		Offset(ol.Offset).
 		Limit(ol.Limit).
 		Order("id desc").
 		Find(&ret.Items).
 		Offset(-1).
 		Limit(-1).
-		Count(&ret.TotalCount)
+		Count(&ret.TotalCount).
+		Error
+	if err != nil {
+		return nil, errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
 
-	return ret, d.Error
+	return ret, nil
+}
+
+// Delete deletes the policy by the policy identifier.
+func (p *policies) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
+	err := p.db.Where("username = ? and name = ?", username, name).Delete(&v1.Policy{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
+}
+
+// DeleteByUser deletes policies by username.
+func (p *policies) DeleteByUser(ctx context.Context, username string, opts metav1.DeleteOptions) error {
+	err := p.db.Where("username = ?", username).Delete(&v1.Policy{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
+}
+
+// DeleteCollection batch deletes policies by policies ids.
+func (p *policies) DeleteCollection(
+	ctx context.Context,
+	username string,
+	names []string,
+	opts metav1.DeleteOptions,
+) error {
+	err := p.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Policy{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
+}
+
+// DeleteCollectionByUser batch deletes policies usernames.
+func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
+	err := p.db.Where("username in (?)", usernames).Delete(&v1.Policy{}).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
 }

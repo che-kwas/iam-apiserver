@@ -2,14 +2,16 @@ package mysql
 
 import (
 	"context"
+	"regexp"
 
-	"github.com/che-kwas/iam-kit/code"
+	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/pkg/code"
 )
 
 type users struct {
@@ -22,12 +24,61 @@ func newUsers(ds *datastore) *users {
 
 // Create creates a new user.
 func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
-	return u.db.Create(&user).Error
+	if err := u.db.Create(&user).Error; err != nil {
+		if match, _ := regexp.MatchString("Duplicate entry '.*' for key 'idx_name'", err.Error()); match {
+			return errors.WithCode(code.ErrUserAlreadyExist, err.Error())
+		}
+
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
+}
+
+// Get return an user by the username.
+func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
+	user := &v1.User{}
+	err := u.db.Where("username = ? and isActive", username).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
+		}
+
+		return nil, errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return user, nil
 }
 
 // Update updates the user.
 func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
-	return u.db.Save(user).Error
+	if err := u.db.Save(user).Error; err != nil {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return nil
+
+}
+
+// List return users.
+func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+	ret := &v1.UserList{}
+	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
+
+	err := u.db.Where("isActive").
+		Offset(ol.Offset).
+		Limit(ol.Limit).
+		Order("id desc").
+		Find(&ret.Items).
+		Offset(-1).
+		Limit(-1).
+		Count(&ret.TotalCount).
+		Error
+	if err != nil {
+		return nil, errors.WithCode(basecode.ErrDatabase, err.Error())
+	}
+
+	return ret, nil
 }
 
 // Delete deletes the user by the username.
@@ -40,7 +91,7 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 
 	err := u.db.Where("username = ?", username).Delete(&v1.User{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
 	return nil
@@ -54,37 +105,9 @@ func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts m
 		return err
 	}
 
-	return u.db.Where("name in (?)", usernames).Delete(&v1.User{}).Error
-}
-
-// Get return an user by the username.
-func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
-	user := &v1.User{}
-	err := u.db.Where("username = ? and isActive", username).First(&user).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.WithCode(code.ErrNotFound, err.Error())
-		}
-
-		return nil, errors.WithCode(code.ErrDatabase, err.Error())
+	if err := u.db.Where("username in (?)", usernames).Delete(&v1.User{}).Error; err != nil {
+		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
-	return user, nil
-}
-
-// List return users.
-func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
-	ret := &v1.UserList{}
-	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
-
-	d := u.db.Where("isActive").
-		Offset(ol.Offset).
-		Limit(ol.Limit).
-		Order("id desc").
-		Find(&ret.Items).
-		Offset(-1).
-		Limit(-1).
-		Count(&ret.TotalCount)
-
-	return ret, d.Error
+	return nil
 }
