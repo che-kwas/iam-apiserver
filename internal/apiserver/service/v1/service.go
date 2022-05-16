@@ -7,8 +7,8 @@ import "iam-apiserver/internal/apiserver/store"
 // Service defines functions used to return resource interface.
 type Service interface {
 	Users() UserSrv
-	// Secrets() SecretSrv
-	// Policies() PolicySrv
+	Secrets() SecretSrv
+	Policies() PolicySrv
 }
 
 type service struct {
@@ -24,4 +24,12 @@ func NewService() Service {
 
 func (s *service) Users() UserSrv {
 	return newUsers(s)
+}
+
+func (s *service) Secrets() SecretSrv {
+	return newSecrets(s)
+}
+
+func (s *service) Policies() PolicySrv {
+	return newPolicies(s)
 }
