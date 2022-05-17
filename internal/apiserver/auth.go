@@ -14,7 +14,6 @@ import (
 	"github.com/che-kwas/iam-kit/middleware/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/bcrypt"
 
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
@@ -39,8 +38,7 @@ func newBasicAuth() middleware.AuthStrategy {
 			return false
 		}
 
-		// Compare the login password with the user password.
-		if err := comparePassword(user.Password, password); err != nil {
+		if !user.VerifyPassword(password) {
 			return false
 		}
 
@@ -93,7 +91,7 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
-		if err := comparePassword(user.Password, login.Password); err != nil {
+		if !user.VerifyPassword(login.Password) {
 			log.Print("Authentication failed: password error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
@@ -184,8 +182,4 @@ func unauthorizedHandler() func(c *gin.Context, code int, message string) {
 			"message": message,
 		})
 	}
-}
-
-func comparePassword(hashedPassword, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

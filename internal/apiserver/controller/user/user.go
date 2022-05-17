@@ -4,6 +4,7 @@ package user
 import (
 	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/httputil"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/errors"
 
@@ -54,4 +55,35 @@ func (u *UserController) Update(c *gin.Context) {
 
 	err := u.srv.Users().Update(c, c.Param("name"), user)
 	httputil.WriteResponse(c, err, user)
+}
+
+// List lists the users in the storage.
+func (u *UserController) List(c *gin.Context) {
+	var opts meta.ListOptions
+	if err := c.ShouldBindQuery(&opts); err != nil {
+		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
+		return
+	}
+
+	users, err := u.srv.Users().List(c, opts)
+	httputil.WriteResponse(c, err, users)
+}
+
+// ChangePasswordRequest defines the ChangePasswordRequest data format.
+type ChangePasswordRequest struct {
+	OldPassword string `json:"oldPassword" binding:"required"`
+	NewPassword string `json:"newPassword" binding:"required"`
+}
+
+// ChangePassword change the user's password by the user identifier.
+func (u *UserController) ChangePassword(c *gin.Context) {
+	var req ChangePasswordRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
+		return
+	}
+
+	err := u.srv.Users().ChangePassword(c, c.Param("name"), req.OldPassword, req.NewPassword)
+	httputil.WriteResponse(c, err, nil)
 }

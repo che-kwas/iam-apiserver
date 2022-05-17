@@ -5,6 +5,7 @@ import (
 
 	"github.com/che-kwas/iam-kit/db"
 	"github.com/che-kwas/iam-kit/meta"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -37,4 +38,10 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
 	u.InstanceID = db.GetInstanceID(u.ID, "user-")
 
 	return tx.Save(u).Error
+}
+
+// VerifyPassword verifies the plain text password.
+func (u *User) VerifyPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	return err == nil
 }

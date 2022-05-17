@@ -22,7 +22,7 @@ type UserSrv interface {
 	List(ctx context.Context, opts meta.ListOptions) (*v1.UserList, error)
 	Delete(ctx context.Context, username string) error
 	DeleteCollection(ctx context.Context, usernames []string) error
-	ChangePassword(ctx context.Context, user *v1.User) error
+	ChangePassword(ctx context.Context, username, oldPassword, newPassword string) error
 }
 
 type userService struct {
@@ -36,12 +36,7 @@ func newUsers(srv *service) *userService {
 }
 
 func (u *userService) Create(ctx context.Context, user *v1.User) error {
-	var err error
-	user.Password, err = hashPassword(user.Password)
-	if err != nil {
-		return errors.WithCode(basecode.ErrPasswordInvalid, err.Error())
-	}
-
+	user.Password, _ = hashPassword(user.Password)
 	user.Name = user.Username
 	user.IsActive = true
 
@@ -122,8 +117,18 @@ func (u *userService) DeleteCollection(ctx context.Context, usernames []string) 
 	return u.store.Users().DeleteCollection(ctx, usernames)
 }
 
-func (u *userService) ChangePassword(ctx context.Context, user *v1.User) error {
-	// Save changed fields.
+func (u *userService) ChangePassword(ctx context.Context, username, oldPassword, newPassword string) error {
+	user, err := u.store.Users().Get(ctx, username)
+	if err != nil {
+		return err
+	}
+
+	if !user.VerifyPassword(oldPassword) {
+		return errors.WithCode(basecode.ErrPermissionDenied, "Old password error")
+	}
+
+	user.Password, _ = hashPassword(newPassword)
+
 	return u.store.Users().Update(ctx, user)
 }
 
