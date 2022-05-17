@@ -57,18 +57,6 @@ func (u *UserController) Update(c *gin.Context) {
 	httputil.WriteResponse(c, err, user)
 }
 
-// List lists the users in the storage.
-func (u *UserController) List(c *gin.Context) {
-	var opts meta.ListOptions
-	if err := c.ShouldBindQuery(&opts); err != nil {
-		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
-		return
-	}
-
-	users, err := u.srv.Users().List(c, opts)
-	httputil.WriteResponse(c, err, users)
-}
-
 // ChangePasswordRequest defines the ChangePasswordRequest data format.
 type ChangePasswordRequest struct {
 	OldPassword string `json:"oldPassword" binding:"required"`
@@ -85,5 +73,30 @@ func (u *UserController) ChangePassword(c *gin.Context) {
 	}
 
 	err := u.srv.Users().ChangePassword(c, c.Param("name"), req.OldPassword, req.NewPassword)
+	httputil.WriteResponse(c, err, nil)
+}
+
+// List lists the users in the storage.
+func (u *UserController) List(c *gin.Context) {
+	var opts meta.ListOptions
+	if err := c.ShouldBindQuery(&opts); err != nil {
+		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
+		return
+	}
+
+	users, err := u.srv.Users().List(c, opts)
+	httputil.WriteResponse(c, err, users)
+}
+
+// Delete deletes the user by the user identifier.
+func (u *UserController) Delete(c *gin.Context) {
+	err := u.srv.Users().Delete(c, c.Param("name"))
+	httputil.WriteResponse(c, err, nil)
+}
+
+// DeleteCollection batch delete users by multiple usernames.
+func (u *UserController) DeleteCollection(c *gin.Context) {
+	usernames := c.QueryArray("name")
+	err := u.srv.Users().DeleteCollection(c, usernames)
 	httputil.WriteResponse(c, err, nil)
 }
