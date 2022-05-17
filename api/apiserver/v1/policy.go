@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/che-kwas/iam-kit/db"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/ory/ladon"
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ import (
 // It is also used as gorm model.
 type Policy struct {
 	// Standard object metadata.
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	meta.ObjectMeta `json:"metadata,omitempty"`
 
 	// The user of the policy.
 	Username string `json:"username" gorm:"column:username" validate:"omitempty"`
@@ -27,7 +27,7 @@ type Policy struct {
 // PolicyList is the whole list of all policies which have been stored in stroage.
 type PolicyList struct {
 	// Standard list metadata.
-	metav1.ListMeta `json:",inline"`
+	meta.ListMeta `json:",inline"`
 
 	// List of policies.
 	Items []*Policy `json:"items"`

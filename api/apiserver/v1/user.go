@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/che-kwas/iam-kit/db"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"gorm.io/gorm"
 )
 
@@ -12,7 +12,7 @@ import (
 // It is also used as gorm model.
 type User struct {
 	// Standard object metadata.
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	meta.ObjectMeta `json:"metadata,omitempty"`
 
 	Username    string    `json:"username"            gorm:"column:username"   validate:"required,min=1,max=30"`
 	Password    string    `json:"password,omitempty"  gorm:"column:password"   validate:"required"`
@@ -27,7 +27,7 @@ type User struct {
 // UserList is the whole list of all users which have been stored in stroage.
 type UserList struct {
 	// Standard list metadata.
-	metav1.ListMeta `json:",inline"`
+	meta.ListMeta `json:",inline"`
 
 	Items []*User `json:"items"`
 }

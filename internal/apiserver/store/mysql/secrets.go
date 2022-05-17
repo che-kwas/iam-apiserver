@@ -5,7 +5,7 @@ import (
 
 	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
@@ -55,7 +55,7 @@ func (s *secrets) Update(ctx context.Context, secret *v1.Secret) error {
 }
 
 // List returns all secrets.
-func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
+func (s *secrets) List(ctx context.Context, username string, opts meta.ListOptions) (*v1.SecretList, error) {
 	ret := &v1.SecretList{}
 	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
 

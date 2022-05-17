@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
-
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
+
+	"github.com/che-kwas/iam-kit/meta"
 )
 
 // PolicySrv defines functions used to handle policy request.
@@ -14,7 +14,7 @@ type PolicySrv interface {
 	Create(ctx context.Context, policy *v1.Policy) error
 	Get(ctx context.Context, username string, name string) (*v1.Policy, error)
 	Update(ctx context.Context, policy *v1.Policy) error
-	List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error)
+	List(ctx context.Context, username string, opts meta.ListOptions) (*v1.PolicyList, error)
 	Delete(ctx context.Context, username string, name string) error
 	DeleteCollection(ctx context.Context, username string, names []string) error
 }
@@ -41,7 +41,7 @@ func (s *policyService) Update(ctx context.Context, policy *v1.Policy) error {
 	return s.store.Policies().Update(ctx, policy)
 }
 
-func (s *policyService) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
+func (s *policyService) List(ctx context.Context, username string, opts meta.ListOptions) (*v1.PolicyList, error) {
 	return s.store.Policies().List(ctx, username, opts)
 }
 

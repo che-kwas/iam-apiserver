@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	basecode "github.com/che-kwas/iam-kit/code"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/marmotedu/errors"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/sync/errgroup"
@@ -19,7 +19,7 @@ type UserSrv interface {
 	Create(ctx context.Context, user *v1.User) error
 	Get(ctx context.Context, username string) (*v1.User, error)
 	Update(ctx context.Context, username string, newUser *v1.User) error
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
+	List(ctx context.Context, opts meta.ListOptions) (*v1.UserList, error)
 	Delete(ctx context.Context, username string) error
 	DeleteCollection(ctx context.Context, usernames []string) error
 	ChangePassword(ctx context.Context, user *v1.User) error
@@ -64,7 +64,7 @@ func (u *userService) Update(ctx context.Context, username string, newUser *v1.U
 	return u.store.Users().Update(ctx, user)
 }
 
-func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+func (u *userService) List(ctx context.Context, opts meta.ListOptions) (*v1.UserList, error) {
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
 		return nil, err
@@ -77,13 +77,13 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	for _, user := range users.Items {
 		user := user
 		eg.Go(func() error {
-			policies, err := u.store.Policies().List(ctx, user.Username, metav1.ListOptions{})
+			policies, err := u.store.Policies().List(ctx, user.Username, meta.ListOptions{})
 			if err != nil {
 				return err
 			}
 
 			m.Store(user.ID, &v1.User{
-				ObjectMeta: metav1.ObjectMeta{
+				ObjectMeta: meta.ObjectMeta{
 					ID:         user.ID,
 					InstanceID: user.InstanceID,
 					Name:       user.Name,

@@ -6,7 +6,7 @@ import (
 
 	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
@@ -61,7 +61,7 @@ func (u *users) Update(ctx context.Context, user *v1.User) error {
 }
 
 // List return users.
-func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+func (u *users) List(ctx context.Context, opts meta.ListOptions) (*v1.UserList, error) {
 	ret := &v1.UserList{}
 	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
 

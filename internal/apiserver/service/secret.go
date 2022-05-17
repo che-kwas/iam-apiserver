@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
-
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
+
+	"github.com/che-kwas/iam-kit/meta"
 )
 
 // SecretSrv defines functions used to handle secret request.
@@ -14,7 +14,7 @@ type SecretSrv interface {
 	Create(ctx context.Context, secret *v1.Secret) error
 	Get(ctx context.Context, username, secretID string) (*v1.Secret, error)
 	Update(ctx context.Context, secret *v1.Secret) error
-	List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error)
+	List(ctx context.Context, username string, opts meta.ListOptions) (*v1.SecretList, error)
 	Delete(ctx context.Context, username, secretID string) error
 	DeleteCollection(ctx context.Context, username string, secretIDs []string) error
 }
@@ -41,7 +41,7 @@ func (s *secretService) Update(ctx context.Context, secret *v1.Secret) error {
 	return s.store.Secrets().Update(ctx, secret)
 }
 
-func (s *secretService) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.SecretList, error) {
+func (s *secretService) List(ctx context.Context, username string, opts meta.ListOptions) (*v1.SecretList, error) {
 	return s.store.Secrets().List(ctx, username, opts)
 }
 

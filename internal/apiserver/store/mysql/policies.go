@@ -5,7 +5,7 @@ import (
 
 	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/db"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/che-kwas/iam-kit/meta"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
@@ -55,7 +55,7 @@ func (p *policies) Update(ctx context.Context, policy *v1.Policy) error {
 }
 
 // List returns all policies.
-func (p *policies) List(ctx context.Context, username string, opts metav1.ListOptions) (*v1.PolicyList, error) {
+func (p *policies) List(ctx context.Context, username string, opts meta.ListOptions) (*v1.PolicyList, error) {
 	ret := &v1.PolicyList{}
 	ol := db.NewOffsetLimit(opts.Offset, opts.Limit)
 
