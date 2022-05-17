@@ -1,3 +1,4 @@
+// Package store defines the storage interface for iam-apiserver.
 package store
 
 //go:generate mockgen -self_package=iam-apiserver/internal/apiserver/store -destination mock_store.go -package store iam-apiserver/internal/apiserver/store Factory,UserStore,SecretStore,PolicyStore

@@ -10,11 +10,11 @@ import (
 	"time"
 
 	ginjwt "github.com/appleboy/gin-jwt/v2"
-	metav1 "github.com/che-kwas/iam-kit/meta/v1"
 	"github.com/che-kwas/iam-kit/middleware"
 	"github.com/che-kwas/iam-kit/middleware/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
 
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
@@ -34,18 +34,18 @@ type loginInfo struct {
 func newBasicAuth() middleware.AuthStrategy {
 	return auth.NewBasicStrategy(func(username string, password string) bool {
 		// fetch user from database
-		user, err := store.Client().Users().Get(context.TODO(), username, metav1.GetOptions{})
+		user, err := store.Client().Users().Get(context.TODO(), username)
 		if err != nil {
 			return false
 		}
 
 		// Compare the login password with the user password.
-		if err := user.ComparePassword(password); err != nil {
+		if err := comparePassword(user.Password, password); err != nil {
 			return false
 		}
 
 		user.LoginedAt = time.Now()
-		_ = store.Client().Users().Update(context.TODO(), user, metav1.UpdateOptions{})
+		_ = store.Client().Users().Update(context.TODO(), user)
 
 		return true
 	})
@@ -87,19 +87,19 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 			return nil, ginjwt.ErrInvalidAuthHeader
 		}
 
-		user, err := store.Client().Users().Get(c, login.Username, metav1.GetOptions{})
+		user, err := store.Client().Users().Get(c, login.Username)
 		if err != nil {
 			log.Print("Authentication failed: username error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
-		if err := user.ComparePassword(login.Password); err != nil {
+		if err := comparePassword(user.Password, login.Password); err != nil {
 			log.Print("Authentication failed: password error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
 		user.LoginedAt = time.Now()
-		_ = store.Client().Users().Update(c, user, metav1.UpdateOptions{})
+		_ = store.Client().Users().Update(c, user)
 
 		return user, nil
 	}
@@ -184,4 +184,8 @@ func unauthorizedHandler() func(c *gin.Context, code int, message string) {
 			"message": message,
 		})
 	}
+}
+
+func comparePassword(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

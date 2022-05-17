@@ -46,7 +46,7 @@ func notFound() func(c *gin.Context) {
 // func isAdmin() gin.HandlerFunc {
 // 	return func(c *gin.Context) {
 // 		username := c.GetString(middleware.UsernameKey)
-// 		user, err := store.Client().Users().Get(c, username, metav1.GetOptions{})
+// 		user, err := store.Client().Users().Get(c, username)
 // 		if err == nil && user.IsAdmin {
 // 			c.Next()
 // 			return

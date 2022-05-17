@@ -1,10 +1,13 @@
-package v1
+package service
 
 import (
 	"context"
 	"sync"
 
+	basecode "github.com/che-kwas/iam-kit/code"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
+	"github.com/marmotedu/errors"
+	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/sync/errgroup"
 
 	v1 "iam-apiserver/api/apiserver/v1"
@@ -13,12 +16,12 @@ import (
 
 // UserSrv defines functions used to handle user request.
 type UserSrv interface {
-	Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error
-	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
-	Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error
+	Create(ctx context.Context, user *v1.User) error
+	Get(ctx context.Context, username string) (*v1.User, error)
+	Update(ctx context.Context, username string, newUser *v1.User) error
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
-	Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error
-	DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error
+	Delete(ctx context.Context, username string) error
+	DeleteCollection(ctx context.Context, usernames []string) error
 	ChangePassword(ctx context.Context, user *v1.User) error
 }
 
@@ -32,16 +35,33 @@ func newUsers(srv *service) *userService {
 	return &userService{store: srv.store}
 }
 
-func (u *userService) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
-	return u.store.Users().Create(ctx, user, opts)
+func (u *userService) Create(ctx context.Context, user *v1.User) error {
+	var err error
+	user.Password, err = hashPassword(user.Password)
+	if err != nil {
+		return errors.WithCode(basecode.ErrPasswordInvalid, err.Error())
+	}
+
+	user.Name = user.Username
+	user.IsActive = true
+
+	return u.store.Users().Create(ctx, user)
 }
 
-func (u *userService) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
-	return u.store.Users().Get(ctx, username, opts)
+func (u *userService) Get(ctx context.Context, username string) (*v1.User, error) {
+	return u.store.Users().Get(ctx, username)
 }
 
-func (u *userService) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
-	return u.store.Users().Update(ctx, user, opts)
+func (u *userService) Update(ctx context.Context, username string, newUser *v1.User) error {
+	user, err := u.store.Users().Get(ctx, username)
+	if err != nil {
+		return err
+	}
+
+	user.Email = newUser.Email
+	user.Phone = newUser.Phone
+	user.Extend = newUser.Extend
+	return u.store.Users().Update(ctx, user)
 }
 
 func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
@@ -94,15 +114,20 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 	return &v1.UserList{ListMeta: users.ListMeta, Items: infos}, nil
 }
 
-func (u *userService) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
-	return u.store.Users().Delete(ctx, username, opts)
+func (u *userService) Delete(ctx context.Context, username string) error {
+	return u.store.Users().Delete(ctx, username)
 }
 
-func (u *userService) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
-	return u.store.Users().DeleteCollection(ctx, usernames, opts)
+func (u *userService) DeleteCollection(ctx context.Context, usernames []string) error {
+	return u.store.Users().DeleteCollection(ctx, usernames)
 }
 
 func (u *userService) ChangePassword(ctx context.Context, user *v1.User) error {
 	// Save changed fields.
-	return u.store.Users().Update(ctx, user, metav1.UpdateOptions{})
+	return u.store.Users().Update(ctx, user)
+}
+
+func hashPassword(password string) (string, error) {
+	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hashedBytes), err
 }

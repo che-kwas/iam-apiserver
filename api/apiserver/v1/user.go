@@ -5,7 +5,6 @@ import (
 
 	"github.com/che-kwas/iam-kit/db"
 	metav1 "github.com/che-kwas/iam-kit/meta/v1"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -38,9 +37,4 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
 	u.InstanceID = db.GetInstanceID(u.ID, "user-")
 
 	return tx.Save(u).Error
-}
-
-// ComparePassword compares user's password with the input pwd.
-func (u *User) ComparePassword(pwd string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwd))
 }

@@ -1,4 +1,5 @@
-package v1
+// Package service is the core business logic.
+package service
 
 //go:generate mockgen -self_package=iam-apiserver/internal/apiserver/service/v1 -destination mock_service.go -package v1 iam-apiserver/internal/apiserver/service/v1 Service,UserSrv,SecretSrv,PolicySrv
 

@@ -23,7 +23,7 @@ func newUsers(ds *datastore) *users {
 }
 
 // Create creates a new user.
-func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
+func (u *users) Create(ctx context.Context, user *v1.User) error {
 	if err := u.db.Create(&user).Error; err != nil {
 		if match, _ := regexp.MatchString("Duplicate entry '.*' for key 'idx_name'", err.Error()); match {
 			return errors.WithCode(code.ErrUserAlreadyExist, err.Error())
@@ -36,7 +36,7 @@ func (u *users) Create(ctx context.Context, user *v1.User, opts metav1.CreateOpt
 }
 
 // Get return an user by the username.
-func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error) {
+func (u *users) Get(ctx context.Context, username string) (*v1.User, error) {
 	user := &v1.User{}
 	err := u.db.Where("username = ? and isActive", username).First(&user).Error
 	if err != nil {
@@ -51,7 +51,7 @@ func (u *users) Get(ctx context.Context, username string, opts metav1.GetOptions
 }
 
 // Update updates the user.
-func (u *users) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
+func (u *users) Update(ctx context.Context, user *v1.User) error {
 	if err := u.db.Save(user).Error; err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
@@ -82,10 +82,10 @@ func (u *users) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList
 }
 
 // Delete deletes the user by the username.
-func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
+func (u *users) Delete(ctx context.Context, username string) error {
 	// delete related policy first
 	pol := newPolicies(&datastore{u.db})
-	if err := pol.DeleteByUser(ctx, username, opts); err != nil {
+	if err := pol.DeleteByUser(ctx, username); err != nil {
 		return err
 	}
 
@@ -98,10 +98,10 @@ func (u *users) Delete(ctx context.Context, username string, opts metav1.DeleteO
 }
 
 // DeleteCollection deletes the users.
-func (u *users) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
+func (u *users) DeleteCollection(ctx context.Context, usernames []string) error {
 	// delete related policy first
 	pol := newPolicies(&datastore{u.db})
-	if err := pol.DeleteCollectionByUser(ctx, usernames, opts); err != nil {
+	if err := pol.DeleteCollectionByUser(ctx, usernames); err != nil {
 		return err
 	}
 

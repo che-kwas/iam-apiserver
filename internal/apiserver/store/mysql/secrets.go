@@ -22,7 +22,7 @@ func newSecrets(ds *datastore) *secrets {
 }
 
 // Create creates a new secret.
-func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
+func (s *secrets) Create(ctx context.Context, secret *v1.Secret) error {
 	if err := s.db.Create(&secret).Error; err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
@@ -31,7 +31,7 @@ func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.Cre
 }
 
 // Get returns the secret by the secret identifier.
-func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
+func (s *secrets) Get(ctx context.Context, username, name string) (*v1.Secret, error) {
 	secret := &v1.Secret{}
 	err := s.db.Where("username = ? and name= ?", username, name).First(&secret).Error
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.Ge
 }
 
 // Update updates the secret.
-func (s *secrets) Update(ctx context.Context, secret *v1.Secret, opts metav1.UpdateOptions) error {
+func (s *secrets) Update(ctx context.Context, secret *v1.Secret) error {
 	if err := s.db.Save(secret).Error; err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
@@ -80,7 +80,7 @@ func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOpt
 }
 
 // Delete deletes the secret by the secret identifier.
-func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1.DeleteOptions) error {
+func (s *secrets) Delete(ctx context.Context, username, name string) error {
 	err := s.db.Where("username = ? and name = ?", username, name).Delete(&v1.Secret{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
@@ -90,12 +90,7 @@ func (s *secrets) Delete(ctx context.Context, username, name string, opts metav1
 }
 
 // DeleteCollection batch deletes the secrets.
-func (s *secrets) DeleteCollection(
-	ctx context.Context,
-	username string,
-	names []string,
-	opts metav1.DeleteOptions,
-) error {
+func (s *secrets) DeleteCollection(ctx context.Context, username string, names []string) error {
 	err := s.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Secret{}).Error
 	if err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
