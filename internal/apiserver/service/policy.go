@@ -11,9 +11,9 @@ import (
 
 // PolicySrv defines functions used to handle policy request.
 type PolicySrv interface {
-	Create(ctx context.Context, policy *v1.Policy) error
+	Create(ctx context.Context, username string, policy *v1.Policy) error
 	Get(ctx context.Context, username string, name string) (*v1.Policy, error)
-	Update(ctx context.Context, policy *v1.Policy) error
+	Update(ctx context.Context, username string, name string, params *v1.Policy) error
 	List(ctx context.Context, username string, opts meta.ListOptions) (*v1.PolicyList, error)
 	Delete(ctx context.Context, username string, name string) error
 	DeleteCollection(ctx context.Context, username string, names []string) error
@@ -29,7 +29,8 @@ func newPolicies(srv *service) *policyService {
 	return &policyService{store: srv.store}
 }
 
-func (s *policyService) Create(ctx context.Context, policy *v1.Policy) error {
+func (s *policyService) Create(ctx context.Context, username string, policy *v1.Policy) error {
+	policy.Username = username
 	return s.store.Policies().Create(ctx, policy)
 }
 
@@ -37,7 +38,14 @@ func (s *policyService) Get(ctx context.Context, username, name string) (*v1.Pol
 	return s.store.Policies().Get(ctx, username, name)
 }
 
-func (s *policyService) Update(ctx context.Context, policy *v1.Policy) error {
+func (s *policyService) Update(ctx context.Context, username string, name string, params *v1.Policy) error {
+	policy, err := s.store.Policies().Get(ctx, username, name)
+	if err != nil {
+		return err
+	}
+
+	policy.Policy = params.Policy
+	policy.Extend = params.Extend
 	return s.store.Policies().Update(ctx, policy)
 }
 
