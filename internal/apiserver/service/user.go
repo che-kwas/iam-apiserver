@@ -18,7 +18,7 @@ import (
 type UserSrv interface {
 	Create(ctx context.Context, user *v1.User) error
 	Get(ctx context.Context, username string) (*v1.User, error)
-	Update(ctx context.Context, username string, newUser *v1.User) error
+	Update(ctx context.Context, username string, params *v1.User) error
 	List(ctx context.Context, opts meta.ListOptions) (*v1.UserList, error)
 	Delete(ctx context.Context, username string) error
 	DeleteCollection(ctx context.Context, usernames []string) error
@@ -47,15 +47,15 @@ func (u *userService) Get(ctx context.Context, username string) (*v1.User, error
 	return u.store.Users().Get(ctx, username)
 }
 
-func (u *userService) Update(ctx context.Context, username string, newUser *v1.User) error {
+func (u *userService) Update(ctx context.Context, username string, params *v1.User) error {
 	user, err := u.store.Users().Get(ctx, username)
 	if err != nil {
 		return err
 	}
 
-	user.Email = newUser.Email
-	user.Phone = newUser.Phone
-	user.Extend = newUser.Extend
+	user.Email = params.Email
+	user.Phone = params.Phone
+	user.Extend = params.Extend
 	return u.store.Users().Update(ctx, user)
 }
 

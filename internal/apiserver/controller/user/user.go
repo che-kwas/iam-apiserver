@@ -46,15 +46,15 @@ func (u *UserController) Get(c *gin.Context) {
 
 // Update updates the user info by the user identifier.
 func (u *UserController) Update(c *gin.Context) {
-	user := &v1.User{}
+	params := &v1.User{}
 
-	if err := c.ShouldBindJSON(user); err != nil {
+	if err := c.ShouldBindJSON(params); err != nil {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
 
-	err := u.srv.Users().Update(c, c.Param("name"), user)
-	httputil.WriteResponse(c, err, user)
+	err := u.srv.Users().Update(c, c.Param("name"), params)
+	httputil.WriteResponse(c, err, nil)
 }
 
 // ChangePasswordRequest defines the ChangePasswordRequest data format.
@@ -65,14 +65,14 @@ type ChangePasswordRequest struct {
 
 // ChangePassword change the user's password by the user identifier.
 func (u *UserController) ChangePassword(c *gin.Context) {
-	var req ChangePasswordRequest
+	var params ChangePasswordRequest
 
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.ShouldBindJSON(&params); err != nil {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
 
-	err := u.srv.Users().ChangePassword(c, c.Param("name"), req.OldPassword, req.NewPassword)
+	err := u.srv.Users().ChangePassword(c, c.Param("name"), params.OldPassword, params.NewPassword)
 	httputil.WriteResponse(c, err, nil)
 }
 
@@ -88,13 +88,13 @@ func (u *UserController) List(c *gin.Context) {
 	httputil.WriteResponse(c, err, users)
 }
 
-// Delete deletes the user by the user identifier.
+// Delete deletes a user by the user identifier.
 func (u *UserController) Delete(c *gin.Context) {
 	err := u.srv.Users().Delete(c, c.Param("name"))
 	httputil.WriteResponse(c, err, nil)
 }
 
-// DeleteCollection batch delete users by multiple usernames.
+// DeleteCollection batch delete users by usernames.
 func (u *UserController) DeleteCollection(c *gin.Context) {
 	usernames := c.QueryArray("name")
 	err := u.srv.Users().DeleteCollection(c, usernames)
