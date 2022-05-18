@@ -1,8 +1,13 @@
 package apiserver
 
 import (
+	"fmt"
+	"iam-apiserver/internal/apiserver/controller/user"
+	"iam-apiserver/internal/apiserver/store"
+
 	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/httputil"
+	"github.com/che-kwas/iam-kit/middleware"
 	"github.com/che-kwas/iam-kit/middleware/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/errors"
@@ -17,24 +22,24 @@ func initRouter(g *gin.Engine) {
 	g.POST("/logout", jwtStrategy.LogoutHandler)
 	g.POST("/refresh", jwtStrategy.RefreshHandler)
 
-	// v1 := g.Group("/v1")
-	// {
-	// 	userv1 := v1.Group("/users")
-	// 	{
-	// 		userController := user.NewUserController()
-	// 		userv1.POST("", userController.Create)
+	v1 := g.Group("/v1")
+	{
+		userv1 := v1.Group("/users")
+		{
+			userController := user.NewUserController()
+			userv1.POST("", userController.Create)
 
-	// 		userv1.Use(auto.AuthFunc())
-	// 		userv1.GET(":name", userController.Get)
-	// 		userv1.PUT(":name", userController.Update)
-	// 		userv1.PUT(":name/change-password", userController.ChangePassword)
+			userv1.Use(auto.AuthFunc())
+			userv1.GET(":name", userController.Get)
+			userv1.PUT(":name", userController.Update)
+			userv1.PUT(":name/change-password", userController.ChangePassword)
 
-	// 		userv1.Use(isAdmin())
-	// 		userv1.GET("", userController.List)
-	// 		userv1.DELETE(":name", userController.Delete)
-	// 		userv1.DELETE("", userController.DeleteCollection)
-	// 	}
-	// }
+			userv1.Use(isAdmin())
+			userv1.GET("", userController.List)
+			userv1.DELETE(":name", userController.Delete)
+			userv1.DELETE("", userController.DeleteCollection)
+		}
+	}
 }
 
 func notFound() func(c *gin.Context) {
@@ -43,24 +48,23 @@ func notFound() func(c *gin.Context) {
 	}
 }
 
-// func isAdmin() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		username := c.GetString(middleware.UsernameKey)
-// 		user, err := store.Client().Users().Get(c, username)
-// 		if err == nil && user.IsAdmin {
-// 			c.Next()
-// 			return
-// 		}
+func isAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		username := c.GetString(middleware.UsernameKey)
+		user, err := store.Client().Users().Get(c, username)
+		if err == nil && user.IsAdmin {
+			c.Next()
+			return
+		}
 
-// 		var msg string
-// 		if err != nil {
-// 			msg = err.Error()
-// 		} else {
-// 			msg = fmt.Sprintf("user %s is not a administrator", username)
-// 		}
+		var msg string
+		if err != nil {
+			msg = err.Error()
+		} else {
+			msg = fmt.Sprintf("user %s is not a administrator", username)
+		}
 
-// 		httputil.WriteResponse(c, errors.WithCode(code.ErrPermissionDenied, msg), nil)
-// 		c.Abort()
-// 		return
-// 	}
-// }
+		httputil.WriteResponse(c, errors.WithCode(code.ErrPermissionDenied, msg), nil)
+		c.Abort()
+	}
+}

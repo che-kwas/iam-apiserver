@@ -30,7 +30,7 @@ lint: tools.verify.golangci-lint
 .PHONY: gen
 gen: tools.verify.codegen
 	codegen ./internal/pkg/code
-	codegen -doc -output ./error_code_apiserver.md ./internal/pkg/code
+	codegen -doc -output ./docs/error_code.md ./internal/pkg/code
 
 ## test: Run unit test.
 .PHONY: test

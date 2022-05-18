@@ -52,7 +52,9 @@ func (s *secretService) Create(ctx context.Context, username string, secret *v1.
 	secret.Username = username
 	secret.SecretID = util.RandString(secretLen)
 	secret.SecretKey = util.RandString(secretLen)
-	secret.Name = secret.SecretID
+	if secret.Name == "" {
+		secret.Name = secret.SecretID
+	}
 
 	return s.store.Secrets().Create(ctx, secret)
 }
