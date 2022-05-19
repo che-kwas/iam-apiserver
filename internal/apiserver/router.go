@@ -2,6 +2,8 @@ package apiserver
 
 import (
 	"fmt"
+	"iam-apiserver/internal/apiserver/controller/policy"
+	"iam-apiserver/internal/apiserver/controller/secret"
 	"iam-apiserver/internal/apiserver/controller/user"
 	"iam-apiserver/internal/apiserver/store"
 
@@ -38,6 +40,31 @@ func initRouter(g *gin.Engine) {
 			userv1.GET("", userController.List)
 			userv1.DELETE(":name", userController.Delete)
 			userv1.DELETE("", userController.DeleteCollection)
+		}
+
+		v1.Use(auto.AuthFunc())
+
+		secretv1 := v1.Group("/secrets")
+		{
+			secretController := secret.NewSecretController()
+
+			secretv1.POST("", secretController.Create)
+			secretv1.GET(":name", secretController.Get)
+			secretv1.PUT(":name", secretController.Update)
+			secretv1.DELETE(":name", secretController.Delete)
+			secretv1.GET("", secretController.List)
+		}
+
+		policyv1 := v1.Group("/policies")
+		{
+			policyController := policy.NewPolicyController()
+
+			policyv1.POST("", policyController.Create)
+			policyv1.GET(":name", policyController.Get)
+			policyv1.PUT(":name", policyController.Update)
+			policyv1.DELETE(":name", policyController.Delete)
+			policyv1.GET("", policyController.List)
+			policyv1.DELETE("", policyController.DeleteCollection)
 		}
 	}
 }

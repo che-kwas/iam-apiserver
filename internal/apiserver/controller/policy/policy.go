@@ -18,8 +18,8 @@ type PolicyController struct {
 	srv service.Service
 }
 
-// NewSecretController creates a policy handler.
-func NewSecretController() *PolicyController {
+// NewPolicyController creates a policy handler.
+func NewPolicyController() *PolicyController {
 	return &PolicyController{
 		srv: service.NewService(),
 	}

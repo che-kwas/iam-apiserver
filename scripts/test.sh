@@ -115,24 +115,30 @@ test::policy()
   token="-HAuthorization: Bearer $(test::admin_login)"
 
   # 1. 如果有policy0策略先清空
-  ${DCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0
+  echo -e '\033[32m1. delete policy\033[0m'
+  ${DCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0; echo
 
   # 2. 创建policy0策略
+  echo -e '\033[32m2. create policy\033[0m'
   ${CCURL} "${Header}" "${token}" http://${SERVER_ADDR}/v1/policies \
-    -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'
+    -d'{"metadata":{"name":"policy0"},"policy":{"description":"One policy to rule them all.","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 3. 列出所有策略
-  ${RCURL} "${token}" http://${SERVER_ADDR}/v1/policies
+  echo -e '\033[32m3. list policies\033[0m'
+  ${RCURL} "${token}" http://${SERVER_ADDR}/v1/policies; echo
 
   # 4. 获取policy0策略的详细信息
-  ${RCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0
+  echo -e '\033[32m4. get policy\033[0m'
+  ${RCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0; echo
 
   # 5. 修改policy0策略
+  echo -e '\033[32m5. update policy\033[0m'
   ${UCURL} "${Header}" "${token}" http://${SERVER_ADDR}/v1/policies/policy0 \
-    -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'
+    -d'{"policy":{"description":"One policy to rule them all(modified).","subjects":["users:<peter|ken>","users:maria","groups:admins"],"actions":["delete","<create|update>"],"effect":"allow","resources":["resources:articles:<.*>","resources:printer"],"conditions":{"remoteIPAddress":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}'; echo
 
   # 6. 删除policy0策略
-  ${DCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0
+  echo -e '\033[32m6. delete policy\033[0m'
+  ${DCURL} "${token}" http://${SERVER_ADDR}/v1/policies/policy0; echo
 
   echo -e '\033[32m/v1/policy test end==========\033[0m'
 }
@@ -166,6 +172,6 @@ test::delete_admin()
 # test::delete_admin
 # test::create_admin
 test::user
-# test::secret
-# test::policy
+test::secret
+test::policy
 test::refresh_logout
