@@ -13,13 +13,13 @@ DCURL="curl -s -XDELETE" # Delete
 test::admin_login()
 {
   basicToken="-HAuthorization: Basic Y2hlOmNoZS1rd2FzLmdpdGVlLmlv"
-  ${CCURL} "${Header}" "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
+  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
 }
 
 test::tom_login()
 {
   basicToken="-HAuthorization: Basic dG9tOnRvbXRvbQ=="
-  ${CCURL} "${Header}" "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
+  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
 }
 
 test::user()
@@ -137,6 +137,20 @@ test::policy()
   echo -e '\033[32m/v1/policy test end==========\033[0m'
 }
 
+test::refresh_logout()
+{
+  echo -e '\033[32mrefresh_logout begin========\033[0m'
+
+  token="-HAuthorization: Bearer $(test::admin_login)"
+
+  echo -e '\033[32m1. refresh token\033[0m'
+  ${CCURL} "${token}" http://${SERVER_ADDR}/refresh; echo
+  echo -e '\033[32m2. logout \033[0m'
+  ${CCURL} "${token}" http://${SERVER_ADDR}/logout; echo
+
+  echo -e '\033[32mrefresh_logout end==========\033[0m'
+}
+
 test::create_admin()
 {
   ${CCURL} "${Header}" http://${SERVER_ADDR}/v1/users \
@@ -149,8 +163,9 @@ test::delete_admin()
   ${DCURL} "${token}" http://${SERVER_ADDR}/v1/users/che; echo
 }
 
-test::delete_admin
-test::create_admin
+# test::delete_admin
+# test::create_admin
 test::user
 # test::secret
 # test::policy
+test::refresh_logout
