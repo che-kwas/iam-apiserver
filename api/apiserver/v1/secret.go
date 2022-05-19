@@ -11,11 +11,11 @@ import (
 type Secret struct {
 	// Standard object metadata.
 	meta.ObjectMeta `json:"metadata,omitempty"`
-	Username        string `json:"username"    gorm:"column:username"    validate:"omitempty"`
-	SecretID        string `json:"secretID"    gorm:"column:secretID"    validate:"omitempty"`
-	SecretKey       string `json:"secretKey"   gorm:"column:secretKey"   validate:"omitempty"`
-	Expires         int64  `json:"expires"     gorm:"column:expires"     validate:"required"`
-	Description     string `json:"description" gorm:"column:description" validate:"required,email,min=1,max=100"`
+	Username        string `json:"username,omitempty"  gorm:"column:username"`
+	SecretID        string `json:"secretID,omitempty"  gorm:"column:secretID"`
+	SecretKey       string `json:"secretKey,omitempty" gorm:"column:secretKey"`
+	Expires         int64  `json:"expires"             gorm:"column:expires"     validate:"required"`
+	Description     string `json:"description"         gorm:"column:description" validate:"required,email,min=1,max=100"`
 }
 
 // SecretList is the whole list of all secrets which have been stored in stroage.

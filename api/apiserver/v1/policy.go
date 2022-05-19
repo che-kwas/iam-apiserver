@@ -16,9 +16,9 @@ type Policy struct {
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
 	// The user of the policy.
-	Username string `json:"username" gorm:"column:username" validate:"omitempty"`
+	Username string `json:"username,omitempty" gorm:"column:username"`
 
-	Policy ladon.DefaultPolicy `json:"policy,omitempty" gorm:"-" validate:"omitempty"`
+	Policy ladon.DefaultPolicy `json:"policy,omitempty" gorm:"-"`
 
 	// The ladon policy content, just a string format of ladon.DefaultPolicy. DO NOT modify directly.
 	PolicyShadow string `json:"-" gorm:"column:policyShadow" validate:"omitempty"`

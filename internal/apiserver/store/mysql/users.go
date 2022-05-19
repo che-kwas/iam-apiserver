@@ -89,8 +89,7 @@ func (u *users) Delete(ctx context.Context, username string) error {
 		return err
 	}
 
-	err := u.db.Where("username = ?", username).Delete(&v1.User{}).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := u.db.Where("username = ?", username).Delete(&v1.User{}).Error; err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 

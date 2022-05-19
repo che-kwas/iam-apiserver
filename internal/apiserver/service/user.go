@@ -36,8 +36,8 @@ func newUsers(srv *service) *userService {
 }
 
 func (u *userService) Create(ctx context.Context, user *v1.User) error {
-	user.Password, _ = hashPassword(user.Password)
 	user.Name = user.Username
+	user.Password, _ = hashPassword(user.Password)
 	user.IsActive = true
 
 	return u.store.Users().Create(ctx, user)

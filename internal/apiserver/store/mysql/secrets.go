@@ -82,7 +82,7 @@ func (s *secrets) List(ctx context.Context, username string, opts meta.ListOptio
 // Delete deletes the secret by the secret identifier.
 func (s *secrets) Delete(ctx context.Context, username, name string) error {
 	err := s.db.Where("username = ? and name = ?", username, name).Delete(&v1.Secret{}).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 

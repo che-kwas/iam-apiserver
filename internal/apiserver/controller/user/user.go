@@ -2,6 +2,8 @@
 package user
 
 import (
+	"log"
+
 	basecode "github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/httputil"
 	"github.com/che-kwas/iam-kit/meta"
@@ -32,6 +34,7 @@ func (u *UserController) Create(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
+	log.Printf("user.Create: %+v", user)
 
 	err := u.srv.Users().Create(c, user)
 	httputil.WriteResponse(c, err, user)

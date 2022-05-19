@@ -42,7 +42,8 @@ func newBasicAuth() middleware.AuthStrategy {
 			return false
 		}
 
-		user.LoginedAt = time.Now()
+		now := time.Now()
+		user.LoginedAt = &now
 		_ = store.Client().Users().Update(context.TODO(), user)
 
 		return true
@@ -96,7 +97,8 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
-		user.LoginedAt = time.Now()
+		now := time.Now()
+		user.LoginedAt = &now
 		_ = store.Client().Users().Update(c, user)
 
 		return user, nil

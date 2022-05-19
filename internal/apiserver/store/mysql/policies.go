@@ -102,7 +102,7 @@ func (p *policies) DeleteByUser(ctx context.Context, username string) error {
 // DeleteCollection batch deletes policies by policies ids.
 func (p *policies) DeleteCollection(ctx context.Context, username string, names []string) error {
 	err := p.db.Where("username = ? and name in (?)", username, names).Delete(&v1.Policy{}).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
@@ -112,7 +112,7 @@ func (p *policies) DeleteCollection(ctx context.Context, username string, names 
 // DeleteCollectionByUser batch deletes policies usernames.
 func (p *policies) DeleteCollectionByUser(ctx context.Context, usernames []string) error {
 	err := p.db.Where("username in (?)", usernames).Delete(&v1.Policy{}).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+	if err != nil {
 		return errors.WithCode(basecode.ErrDatabase, err.Error())
 	}
 
