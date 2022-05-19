@@ -52,3 +52,7 @@
 | [PUT /v1/policies/:name](./docs/policy.md#4-修改授权策略属性) | 修改授权策略属性 |
 | [GET /v1/policies/:name](./docs/policy.md#5-查询授权策略信息) | 查询授权策略信息 |
 | [GET /v1/policies](./docs/policy.md#6-查询授权策略列表)       | 查询授权策略列表 |
+
+## TODO
+
+1. secret, policy group 添加`middleware.Publish`

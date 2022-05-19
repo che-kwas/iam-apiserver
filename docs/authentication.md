@@ -14,8 +14,8 @@ POST /login
 
 **Header 参数**
 
-| 参数名称      | 必选 | 类型   | 描述                                   |
-| ------------- | ---- | ------ | -------------------------------------- |
+| 参数名称      | 必选 | 类型   | 描述                                               |
+| ------------- | ---- | ------ | -------------------------------------------------- |
 | Authorization | 是   | String | "Basic" + <`username:password` Base64格式的字符串> |
 
 ### 1.4 输出参数
@@ -30,7 +30,7 @@ POST /login
 **输入示例**
 
 ```bash
-$ curl -XPOST -H"Authorization: Basic `echo -n 'admin:Admin@2021'|base64`" http://iam.api.marmotedu.com:8080/login
+$ curl -XPOST -H"Authorization: Basic `echo -n 'tom:tomtom'|base64`" http://localhost:8000/login
 ```
 
 **输出示例**
@@ -65,7 +65,7 @@ Null
 **输入示例**
 
 ```bash
-$ curl -XPOST http://iam.api.marmotedu.com:8080/logout
+$ curl -XPOST http://localhost:8000/logout
 ```
 
 **输出示例**
@@ -88,8 +88,8 @@ POST /refresh
 
 **Header 参数**
 
-| 参数名称      | 必选 | 类型   | 描述                                   |
-| ------------- | ---- | ------ | -------------------------------------- |
+| 参数名称      | 必选 | 类型   | 描述                    |
+| ------------- | ---- | ------ | ----------------------- |
 | Authorization | 是   | String | "Bearer " + <JWT Token> |
 
 ### 3.4 输出参数
@@ -104,7 +104,7 @@ POST /refresh
 **输入示例**
 
 ```bash
-$ curl -XPOST -H"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzM0MTY1MzUsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjU2NDA1MzUsInN1YiI6ImFkbWluIn0.tFJC5ZO2UGy-3NI_FLiGrQF-DztRmBSDP4C5gazQYW4" http://iam.api.marmotedu.com:8080/refresh
+$ curl -XPOST -H"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzM0MTY1MzUsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjU2NDA1MzUsInN1YiI6ImFkbWluIn0.tFJC5ZO2UGy-3NI_FLiGrQF-DztRmBSDP4C5gazQYW4" http://localhost:8000/refresh
 ```
 
 **输出示例**

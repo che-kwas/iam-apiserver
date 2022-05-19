@@ -17,14 +17,14 @@ POST /v1/policies
 | 参数名称 | 必选 | 类型                                                   | 描述                |
 | -------- | ---- | ------------------------------------------------------ | ------------------- |
 | metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta)                   | REST 资源的功能属性 |
-| policy   | 是   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息   |
+| policy   | 是   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息  |
 
 ### 1.4 输出参数
 
 | 参数名称 | 类型                                                   | 描述                |
 | -------- | ------------------------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta)                   | REST 资源的功能属性 |
-| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息   |
+| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息  |
 
 ### 1.5 请求示例
 
@@ -60,8 +60,9 @@ POST /v1/policies
       }
     }
   }
-}' http://marmotedu.io:8080/v1/policies
+}' http://localhost:8000/v1/policies
 ```
+
 **输出示例**
 
 ```json
@@ -117,9 +118,9 @@ DELETE /v1/policies
 
 **Query 参数**
 
-| 参数名称 | 必选 | 类型   | 描述     |
-| -------- | ---- | ------ | -------- |
-| name | 是   | String | 资源名称（授权策略名） |
+| 参数名称 | 必选 | 类型   | 描述                   |
+| -------- | ---- | ------ | ---------------------- |
+| name     | 是   | String | 资源名称（授权策略名） |
 
 ### 2.4 输出参数
 
@@ -130,7 +131,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/policies?name=policy&name=sdk
+curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://localhost:8000/v1/policies?name=policy&name=sdk
 ```
 
 **输出示例**
@@ -153,9 +154,9 @@ DELETE /v1/policies/:name
 
 **Path 参数**
 
-| 参数名称 | 必选 | 类型   | 描述     |
-| -------- | ---- | ------ | -------- |
-| name | 是   | String | 资源名称（授权策略名） |
+| 参数名称 | 必选 | 类型   | 描述                   |
+| -------- | ---- | ------ | ---------------------- |
+| name     | 是   | String | 资源名称（授权策略名） |
 
 ### 3.4 输出参数
 
@@ -166,7 +167,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/policies/policy
+curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://localhost:8000/v1/policies/policy
 ```
 
 **输出示例**
@@ -192,14 +193,14 @@ PUT /v1/policies/:name
 | 参数名称 | 必选 | 类型                                                   | 描述                |
 | -------- | ---- | ------------------------------------------------------ | ------------------- |
 | metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta)                   | REST 资源的功能属性 |
-| policy   | 是   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息   |
+| policy   | 是   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息  |
 
 ### 4.4 输出参数
 
 | 参数名称 | 类型                                                   | 描述                |
 | -------- | ------------------------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta)                   | REST 资源的功能属性 |
-| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息   |
+| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息  |
 
 ### 4.5 请求示例
 
@@ -235,7 +236,7 @@ PUT /v1/policies/:name
       }
     }
   }
-}' http://marmotedu.io:8080/v1/policies
+}' http://localhost:8000/v1/policies
 ```
 **输出示例**
 
@@ -292,23 +293,23 @@ GET /v1/policies/:name
 
 **Path 参数**
 
-| 参数名称 | 必选 | 类型   | 描述     |
-| -------- | ---- | ------ | -------- |
-| name | 是   | String | 资源名称（授权策略名） |
+| 参数名称 | 必选 | 类型   | 描述                   |
+| -------- | ---- | ------ | ---------------------- |
+| name     | 是   | String | 资源名称（授权策略名） |
 
 ### 5.4 输出参数
 
 | 参数名称 | 类型                                                   | 描述                |
 | -------- | ------------------------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta)                   | REST 资源的功能属性 |
-| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息   |
+| policy   | [ladon.DefaultPolicy](./struct.md#ladon.DefaultPolicy) | Ladon 授权策略信息  |
 
 ### 5.5 请求示例
 
 **输入示例**
 
 ```bash
-curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/policies/policy
+curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/policies/policy
 ```
 
 **输出示例**
@@ -366,15 +367,16 @@ GET /v1/policies
 
 **Query 参数**
 
-| 参数名称      | 必选 | 类型   | 描述                                                           |
-| ------------- | ---- | ------ | -------------------------------------------------------------- |
-| fieldSelector | 否   | String | 字段选择器，格式为 `name=policy,description=admin`,当前只支持 name 字段过滤 |
+| 参数名称 | 必选 | 类型    | 描述                     |
+| -------- | ---- | ------- | ------------------------ |
+| offset   | 否   | Integer | 偏移量，默认0            |
+| limit    | 否   | Integer | 查询最大记录数，默认1000 |
 
 ### 6.4 输出参数
 
-| 参数名称   | 类型     | 描述               |
-| ---------- | -------- | ------------------ |
-| totalCount | Uint64     | 资源总个数         |
+| 参数名称   | 类型                                  | 描述                   |
+| ---------- | ------------------------------------- | ---------------------- |
+| totalCount | Uint64                                | 资源总个数             |
 | items      | Array of [Policy](./struct.md#Policy) | 符合条件的授权策略列表 |
 
 ### 6.5 请求示例
@@ -382,7 +384,7 @@ GET /v1/policies
 **输入示例**
 
 ```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/policies?offset=0&limit=10&fieldSelector=name=policy
+curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/policies?offset=0&limit=10
 ```
 
 **输出示例**

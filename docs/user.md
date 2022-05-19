@@ -17,7 +17,7 @@ POST /v1/users
 | 参数名称 | 必选 | 类型                                 | 描述                |
 | -------- | ---- | ------------------------------------ | ------------------- |
 | metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| nickname | 是   | String                               | 昵称                |
+| username | 是   | String                               | 用户名              |
 | password | 是   | String                               | 密码                |
 | email    | 是   | String                               | 邮箱地址            |
 | phone    | 否   | String                               | 电话号码            |
@@ -27,7 +27,7 @@ POST /v1/users
 | 参数名称 | 类型                                 | 描述                |
 | -------- | ------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| nickname | String                               | 昵称                |
+| username | String                               | 用户名              |
 | password | String                               | 密码                |
 | email    | String                               | 邮箱地址            |
 | phone    | String                               | 电话号码            |
@@ -38,14 +38,11 @@ POST /v1/users
 
 ```bash
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
-  "metadata": {
-    "name": "foo"
-  },
-  "nickname": "foo",
+  "username": "foo",
   "password": "Foo@2020",
   "email": "foo@foxmail.com",
   "phone": "1812884xxxx"
-}' http://marmotedu.io:8080/v1/users
+}' http://localhost:8000/v1/users
 ```
 **输出示例**
 
@@ -57,7 +54,7 @@ POST /v1/users
     "createdAt": "2020-09-23T00:27:23.432346108+08:00",
     "updatedAt": "2020-09-23T00:27:23.432346108+08:00"
   },
-  "nickname": "foo",
+  "username": "foo",
   "password": "$2a$10$5M4m97yo4fZAHPwcRQdr1e0NaX7qMYKRIv0xePDtI8bk0ZGLN9X/6",
   "email": "foo@foxmail.com",
   "phone": "1812884xxxx"
@@ -91,7 +88,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/users?name=foo&name=fooo
+curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://localhost:8000/v1/users?name=foo&name=fooo
 ```
 
 **输出示例**
@@ -127,7 +124,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/users/foo
+curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://localhost:8000/v1/users/foo
 ```
 
 **输出示例**
@@ -167,7 +164,7 @@ Null
 curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
   "oldPassword": "Foo@2020",
   "newPassword": "Foo@2021"
-}' http://marmotedu.io:8080/v1/users/foo/change_password
+}' http://localhost:8000/v1/users/foo/change_password
 ```
 
 **输出示例**
@@ -193,7 +190,7 @@ PUT /v1/users/:name
 | 参数名称 | 必选 | 类型                                 | 描述                |
 | -------- | ---- | ------------------------------------ | ------------------- |
 | metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| nickname | 是   | String                               | 昵称                |
+| username | 是   | String                               | 用户名              |
 | password | 是   | String                               | 密码                |
 | email    | 是   | String                               | 邮箱地址            |
 | phone    | 否   | String                               | 电话号码            |
@@ -203,7 +200,7 @@ PUT /v1/users/:name
 | 参数名称 | 类型                                 | 描述                |
 | -------- | ------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| nickname | String                               | 昵称                |
+| username | String                               | 用户名              |
 | password | String                               | 密码                |
 | email    | String                               | 邮箱地址            |
 | phone    | String                               | 电话号码            |
@@ -214,14 +211,11 @@ PUT /v1/users/:name
 
 ```bash
  curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'{
-  "metadata": {
-    "name": "foo"
-  },
-  "nickname": "foo1",
+  "username": "foo",
   "password": "Foo@2020",
-  "email": "foo@foxmail.com",
+  "email": "foo1@foxmail.com",
   "phone": "1812884xxxx"
-}' http://marmotedu.io:8080/v1/users
+}' http://localhost:8000/v1/users
 ```
 **输出示例**
 
@@ -233,9 +227,9 @@ PUT /v1/users/:name
     "createdAt": "2020-09-23T00:27:23.432346108+08:00",
     "updatedAt": "2020-09-23T00:27:23.432346108+08:00"
   },
-  "nickname": "foo1",
+  "username": "foo",
   "password": "$2a$10$5M4m97yo4fZAHPwcRQdr1e0NaX7qMYKRIv0xePDtI8bk0ZGLN9X/6",
-  "email": "foo@foxmail.com",
+  "email": "foo1@foxmail.com",
   "phone": "1812884xxxx"
 }
 ```
@@ -263,7 +257,7 @@ GET /v1/users/:name
 | 参数名称 | 类型                                 | 描述                |
 | -------- | ------------------------------------ | ------------------- |
 | metadata | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| nickname | String                               | 昵称                |
+| username | String                               | 用户名              |
 | password | String                               | 密码                |
 | email    | String                               | 邮箱地址            |
 | phone    | String                               | 电话号码            |
@@ -273,7 +267,7 @@ GET /v1/users/:name
 **输入示例**
 
 ```bash
-curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/users/foo
+curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/users/foo
 ```
 
 **输出示例**
@@ -286,7 +280,7 @@ curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -
     "createdAt": "2020-09-23T07:33:14+08:00",
     "updatedAt": "2020-09-23T07:53:09+08:00"
   },
-  "nickname": "foo1",
+  "username": "foo",
   "password": "$2a$10$nJ0edVsVnmpVXPSm93g9SuwQjbdzL.ZgjQO3wdaMEgJ85ilX5bSK2",
   "email": "foo@foxmail.com",
   "phone": "1812884xxxx"
@@ -307,23 +301,24 @@ GET /v1/users
 
 **Query 参数**
 
-| 参数名称      | 必选 | 类型   | 描述                                                             |
-| ------------- | ---- | ------ | ---------------------------------------------------------------- |
-| fieldSelector | 否   | String | 字段选择器，格式为 `name=foo,phone=181`,当前只支持 name 字段过滤 |
+| 参数名称 | 必选 | 类型    | 描述                     |
+| -------- | ---- | ------- | ------------------------ |
+| offset   | 否   | Integer | 偏移量，默认0            |
+| limit    | 否   | Integer | 查询最大记录数，默认1000 |
 
 ### 7.4 输出参数
 
-| 参数名称   | 类型                                  | 描述               |
-| ---------- | ------------------------------------- | ------------------ |
-| totalCount | Uint64                                | 资源总个数         |
-| items      | Array of [UserV2](./struct.md#UserV2) | 符合条件的用户列表 |
+| 参数名称   | 类型                              | 描述               |
+| ---------- | --------------------------------- | ------------------ |
+| totalCount | Uint64                            | 资源总个数         |
+| items      | Array of [User](./struct.md#User) | 符合条件的用户列表 |
 
 ### 7.5 请求示例
 
 **输入示例**
 
 ```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/users?offset=0&limit=10&fieldSelector=name=foo
+curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/users?offset=0&limit=10
 ```
 
 **输出示例**
@@ -339,7 +334,7 @@ curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' 
         "createdAt": "2020-09-23T07:33:14+08:00",
         "updatedAt": "2020-09-23T07:53:09+08:00"
       },
-      "nickname": "foo1",
+      "username": "foo",
       "password": "",
       "email": "foo@foxmail.com",
       "phone": "1812884xxxx",

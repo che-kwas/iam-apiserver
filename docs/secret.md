@@ -14,11 +14,11 @@ POST /v1/secrets
 
 **Body 参数**
 
-| 参数名称 | 必选 | 类型                      | 描述               |
-| -------- | ---- | ------------------------- | ------------------ |
-| metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| expires | 否   | Int64                    | 过期时间               |
-| description | 否   | String                    | 密钥描述               |
+| 参数名称    | 必选 | 类型                                 | 描述                |
+| ----------- | ---- | ------------------------------------ | ------------------- |
+| metadata    | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
+| expires     | 否   | Int64                                | 过期时间            |
+| description | 否   | String                               | 密钥描述            |
 
 ### 1.4 输出参数
 
@@ -26,8 +26,8 @@ POST /v1/secrets
 | ----------- | ------------------------------------ | ------------------- |
 | metadata    | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
 | username    | String                               | 用户名              |
-| secretID    | String                               | 密钥 ID              |
-| secretKey   | String                               | 密钥 Key             |
+| secretID    | String                               | 密钥 ID             |
+| secretKey   | String                               | 密钥 Key            |
 | expires     | Int64                                | 过期时间            |
 | description | String                               | 密钥描述            |
 
@@ -42,7 +42,7 @@ POST /v1/secrets
   },
   "expires": 0,
   "description": "admin secret"
-}' http://marmotedu.io:8080/v1/secrets
+}' http://localhost:8000/v1/secrets
 ```
 **输出示例**
 
@@ -76,9 +76,9 @@ DELETE /v1/secrets/:name
 
 **Path 参数**
 
-| 参数名称 | 必选 | 类型   | 描述     |
-| -------- | ---- | ------ | -------- |
-| name | 是   | String | 资源名称（密钥名） |
+| 参数名称 | 必选 | 类型   | 描述               |
+| -------- | ---- | ------ | ------------------ |
+| name     | 是   | String | 资源名称（密钥名） |
 
 ### 2.4 输出参数
 
@@ -89,7 +89,7 @@ Null
 **输入示例**
 
 ```bash
-curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://marmotedu.io:8080/v1/secrets/foo
+curl -XDELETE -H'Content-Type: application/json' -H'Authorization: Bearer $Token' http://localhost:8000/v1/secrets/foo
 ```
 
 **输出示例**
@@ -112,11 +112,11 @@ PUT /v1/secrets/:name
 
 **Body 参数**
 
-| 参数名称 | 必选 | 类型                      | 描述               |
-| -------- | ---- | ------------------------- | ------------------ |
-| metadata | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
-| expires | 否   | Int64                    | 过期时间               |
-| description | 否   | String                    | 密钥描述               |
+| 参数名称    | 必选 | 类型                                 | 描述                |
+| ----------- | ---- | ------------------------------------ | ------------------- |
+| metadata    | 是   | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
+| expires     | 否   | Int64                                | 过期时间            |
+| description | 否   | String                               | 密钥描述            |
 
 ### 3.4 输出参数
 
@@ -124,8 +124,8 @@ PUT /v1/secrets/:name
 | ----------- | ------------------------------------ | ------------------- |
 | metadata    | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
 | username    | String                               | 用户名              |
-| secretID    | String                               | 密钥 ID              |
-| secretKey   | String                               | 密钥 Key             |
+| secretID    | String                               | 密钥 ID             |
+| secretKey   | String                               | 密钥 Key            |
 | expires     | Int64                                | 过期时间            |
 | description | String                               | 密钥描述            |
 
@@ -140,7 +140,7 @@ PUT /v1/secrets/:name
   },
   "expires": 0,
   "description": "admin secret(modify)"
-}' http://marmotedu.io:8080/v1/secrets/secret
+}' http://localhost:8000/v1/secrets/secret
 ```
 **输出示例**
 
@@ -174,9 +174,9 @@ GET /v1/secrets/:name
 
 **Path 参数**
 
-| 参数名称 | 必选 | 类型   | 描述     |
-| -------- | ---- | ------ | -------- |
-| name | 是   | String | 资源名称（密钥名） |
+| 参数名称 | 必选 | 类型   | 描述               |
+| -------- | ---- | ------ | ------------------ |
+| name     | 是   | String | 资源名称（密钥名） |
 
 ### 4.4 输出参数
 
@@ -184,8 +184,8 @@ GET /v1/secrets/:name
 | ----------- | ------------------------------------ | ------------------- |
 | metadata    | [ObjectMeta](./struct.md#ObjectMeta) | REST 资源的功能属性 |
 | username    | String                               | 用户名              |
-| secretID    | String                               | 密钥 ID              |
-| secretKey   | String                               | 密钥 Key             |
+| secretID    | String                               | 密钥 ID             |
+| secretKey   | String                               | 密钥 Key            |
 | expires     | Int64                                | 过期时间            |
 | description | String                               | 密钥描述            |
 
@@ -194,7 +194,7 @@ GET /v1/secrets/:name
 **输入示例**
 
 ```bash
-curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/secrets/secret
+curl -XGET -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/secrets/secret
 ```
 
 **输出示例**
@@ -229,15 +229,16 @@ GET /v1/secrets
 
 **Query 参数**
 
-| 参数名称      | 必选 | 类型   | 描述                                                           |
-| ------------- | ---- | ------ | -------------------------------------------------------------- |
-| fieldSelector | 否   | String | 字段选择器，格式为 `name=foo,phone=181`,当前只支持 name 字段过滤 |
+| 参数名称 | 必选 | 类型    | 描述                     |
+| -------- | ---- | ------- | ------------------------ |
+| offset   | 否   | Integer | 偏移量，默认0            |
+| limit    | 否   | Integer | 查询最大记录数，默认1000 |
 
 ### 5.4 输出参数
 
-| 参数名称   | 类型     | 描述               |
-| ---------- | -------- | ------------------ |
-| totalCount | Uint64     | 资源总个数         |
+| 参数名称   | 类型                                  | 描述               |
+| ---------- | ------------------------------------- | ------------------ |
+| totalCount | Uint64                                | 资源总个数         |
 | items      | Array of [Secret](./struct.md#Secret) | 符合条件的密钥列表 |
 
 ### 5.5 请求示例
@@ -245,7 +246,7 @@ GET /v1/secrets
 **输入示例**
 
 ```bash
-curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://marmotedu.io:8080/v1/secrets?offset=0&limit=10&fieldSelector=name=secret1
+curl -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer $Token' -d'' http://localhost:8000/v1/secrets?offset=0&limit=10
 ```
 
 **输出示例**
