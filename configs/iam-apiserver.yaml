@@ -1,5 +1,5 @@
 http:
-  address: ${IAM_APISERVER_HTTP_ADDRESS} # 默认 0.0.0.0:8000
+  addr: 0.0.0.0:8000 # 默认 0.0.0.0:8000
   mode: debug # release, debug, test，默认 release
   healthz: true # 是否开启健康检查, router: /healthz，默认 true
   metrics: false # 是否开启 metrics, router: /metrics，默认 false
@@ -7,7 +7,7 @@ http:
   ping-timeout: 10s # http 服务启动后，自检超时时间，默认 10s
 
 grpc:
-  address: ${IAM_APISERVER_GRPC_ADDRESS} # 默认 0.0.0.0:8001
+  addr: 0.0.0.0:8001 # 默认 0.0.0.0:8001
   max-msg-size: 4194304 # 4mb
 
 jwt:
@@ -16,15 +16,15 @@ jwt:
   max-refresh: 24h # token 更新时间(小时)
 
 mysql:
-  host: ${IAM_MYSQL_HOST} # 默认 127.0.0.1:3306
-  username: ${IAM_MYSQL_USERNAME}
-  password: ${IAM_MYSQL_PASSWORD}
-  database: ${IAM_MYSQL_DATABASE}
+  addr: 127.0.0.1:3306 # 默认 127.0.0.1:3306
+  username: che
+  password: "774411"
+  database: iam
   max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
   max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
 
 redis:
-  enable-cluster: false # 是否开启集群模式
-  host: ${IAM_REDIS_HOST} # 默认 127.0.0.1:6379
-  password: ${IAM_REDIS_PASSWORD}
+  addrs: ["127.0.0.1:6379"] # 1个addr为单节点模式，多个addrs为cluster模式
+  password: "774411"
+  database: 1
