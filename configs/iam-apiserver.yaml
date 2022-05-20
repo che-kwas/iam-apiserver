@@ -23,3 +23,8 @@ mysql:
   max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
   max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
+
+redis:
+  enable-cluster: false # 是否开启集群模式
+  host: ${IAM_REDIS_HOST} # 默认 127.0.0.1:6379
+  password: ${IAM_REDIS_PASSWORD}

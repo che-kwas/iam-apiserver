@@ -3,7 +3,8 @@
 package main
 
 import (
-	"log"
+	"math/rand"
+	"time"
 
 	"github.com/spf13/pflag"
 
@@ -17,18 +18,13 @@ var (
 )
 
 func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	pflag.Parse()
 	if *help {
 		pflag.Usage()
 		return
 	}
 
-	server, err := apiserver.NewServer(name, *cfg)
-	if err != nil {
-		log.Fatal("Build server error: ", err)
-	}
-
-	if err := server.Run(); err != nil {
-		log.Fatal("Server stopped unexpectedly: ", err)
-	}
+	apiserver.NewServer(name, *cfg).Run()
 }
