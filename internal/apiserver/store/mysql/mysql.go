@@ -60,11 +60,14 @@ func GetMySQLStore() (store.Store, error) {
 		return nil, fmt.Errorf("failed to get mysql store fatory: %v", err)
 	}
 
-	migrateDatabase(dbIns)
+	// TODO manual migrate
+	autoMigrate(dbIns)
+
 	return mysqlStore, nil
 }
 
-func migrateDatabase(db *gorm.DB) error {
+// nolint:unused
+func autoMigrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(&v1.User{}); err != nil {
 		return errors.Wrap(err, "migrate user model failed")
 	}
