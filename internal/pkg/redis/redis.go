@@ -1,5 +1,5 @@
-// Package cache define the global cache instance.
-package cache
+// Package redis defines the global redis client.
+package redis
 
 import (
 	"sync"
@@ -15,8 +15,8 @@ var (
 	once sync.Once
 )
 
-// Cache returns the global config instance.
-func Cache() *redis.UniversalClient {
+// Client returns the global redis client.
+func Client() *redis.UniversalClient {
 	if rdb != nil {
 		return rdb
 	}
