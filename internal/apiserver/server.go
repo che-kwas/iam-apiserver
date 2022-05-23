@@ -3,9 +3,9 @@ package apiserver
 import (
 	"log"
 
-	"github.com/che-kwas/iam-kit/config"
 	"github.com/che-kwas/iam-kit/server"
 
+	"iam-apiserver/internal/apiserver/config"
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/apiserver/store/mysql"
 )
@@ -17,9 +17,10 @@ type apiServer struct {
 }
 
 // NewServer builds a new apiServer.
-func NewServer(name, cfgFile string) *apiServer {
+func NewServer(name string) *apiServer {
 	s := &apiServer{name: name}
-	return s.loadConfig(cfgFile).initStore().initCache().build()
+
+	return s.initStore().initCache().build()
 }
 
 // Run runs the apiServer.
@@ -33,18 +34,13 @@ func (s *apiServer) Run() {
 	}
 }
 
-func (s *apiServer) loadConfig(cfgFile string) *apiServer {
-	s.err = config.LoadConfig(cfgFile, s.name)
-	return s
-}
-
 func (s *apiServer) initStore() *apiServer {
 	if s.err != nil {
 		return s
 	}
 
 	var storeIns store.Store
-	storeIns, s.err = mysql.GetMySQLStore()
+	storeIns, s.err = mysql.MySQLStore()
 	if s.err != nil {
 		return s
 	}
@@ -66,7 +62,8 @@ func (s *apiServer) build() *apiServer {
 		return s
 	}
 
-	s.Server, s.err = server.NewServer(s.name)
+	cfg := config.Cfg()
+	s.Server, s.err = server.NewServer(s.name, cfg.HTTPOpts, cfg.GRPCOpts)
 	if s.err != nil {
 		return s
 	}

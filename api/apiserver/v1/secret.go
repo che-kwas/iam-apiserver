@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/che-kwas/iam-kit/db"
 	"github.com/che-kwas/iam-kit/meta"
+	"github.com/che-kwas/iam-kit/util"
 	"gorm.io/gorm"
 )
 
@@ -29,7 +29,7 @@ type SecretList struct {
 
 // AfterCreate runs after create database record.
 func (s *Secret) AfterCreate(tx *gorm.DB) error {
-	s.InstanceID = db.GetInstanceID(s.ID, "secret-")
+	s.InstanceID = util.GetInstanceID(s.ID, "secret-")
 
 	return tx.Save(s).Error
 }

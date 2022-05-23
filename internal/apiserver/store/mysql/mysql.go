@@ -10,6 +10,7 @@ import (
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
+	"iam-apiserver/internal/apiserver/config"
 	"iam-apiserver/internal/apiserver/store"
 )
 
@@ -43,8 +44,8 @@ var (
 	once       sync.Once
 )
 
-// GetMySQLStore gets/creats a mysql store.
-func GetMySQLStore() (store.Store, error) {
+// MySQLStore returns a mysql store.
+func MySQLStore() (store.Store, error) {
 	if mysqlStore != nil {
 		return mysqlStore, nil
 	}
@@ -52,7 +53,7 @@ func GetMySQLStore() (store.Store, error) {
 	var err error
 	var dbIns *gorm.DB
 	once.Do(func() {
-		dbIns, err = db.NewDBBuilder().Build()
+		dbIns, err = db.NewMysqlIns(config.Cfg().MysqlOpts)
 		mysqlStore = &datastore{dbIns}
 	})
 

@@ -3,8 +3,8 @@ package v1
 import (
 	"time"
 
-	"github.com/che-kwas/iam-kit/db"
 	"github.com/che-kwas/iam-kit/meta"
+	"github.com/che-kwas/iam-kit/util"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -35,7 +35,7 @@ type UserList struct {
 
 // AfterCreate runs after create database record.
 func (u *User) AfterCreate(tx *gorm.DB) error {
-	u.InstanceID = db.GetInstanceID(u.ID, "user-")
+	u.InstanceID = util.GetInstanceID(u.ID, "user-")
 
 	return tx.Save(u).Error
 }

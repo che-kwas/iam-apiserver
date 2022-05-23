@@ -3,12 +3,14 @@
 package main
 
 import (
+	"log"
 	"math/rand"
 	"time"
 
 	"github.com/spf13/pflag"
 
 	"iam-apiserver/internal/apiserver"
+	"iam-apiserver/internal/apiserver/config"
 )
 
 var (
@@ -20,11 +22,16 @@ var (
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
+	// parse flag
 	pflag.Parse()
 	if *help {
 		pflag.Usage()
 		return
 	}
 
-	apiserver.NewServer(name, *cfg).Run()
+	if err := config.InitConfig(*cfg, name); err != nil {
+		log.Fatal("Initializa config failed: ", err)
+	}
+
+	apiserver.NewServer(name).Run()
 }
