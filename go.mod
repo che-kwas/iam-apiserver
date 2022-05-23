@@ -7,6 +7,7 @@ require (
 	github.com/appleboy/gin-jwt/v2 v2.8.0
 	github.com/che-kwas/iam-kit v0.1.5
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-redis/redis/v8 v8.11.5
 	github.com/marmotedu/errors v1.0.2
 	github.com/ory/ladon v1.2.0
 	github.com/spf13/pflag v1.0.5
@@ -17,7 +18,9 @@ require (
 )
 
 require (
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/cors v1.3.1 // indirect
