@@ -1,61 +1,58 @@
 package middleware
 
-// import (
-// 	"context"
-// 	"encoding/json"
-// 	"iam-apiserver/internal/pkg/cache"
-// 	"log"
-// 	"net/http"
-// 	"strings"
+import (
+	"log"
+	"net/http"
+	"strings"
 
-// 	"github.com/gin-gonic/gin"
-// )
+	"github.com/gin-gonic/gin"
 
-// // Redis pub/sub events.
-// const (
-// 	RedisPubSubChannel  = "iam.notifications"
-// 	NoticePolicyChanged = "PolicyChanged"
-// 	NoticeSecretChanged = "SecretChanged"
-// )
+	"iam-apiserver/internal/pkg/redis"
+)
 
-// // Publish publish a event to specified redis channel when policy/secret changed.
-// func Publish() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		c.Next()
+// Redis pub/sub events.
+const (
+	RedisPubSubChannel  = "iam.notifications"
+	NoticePolicyChanged = "PolicyChanged"
+	NoticeSecretChanged = "SecretChanged"
+)
 
-// 		if c.Writer.Status() != http.StatusOK {
-// 			return
-// 		}
+// Publish publishes a event to specified redis channel when policy/secret changed.
+func Publish() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
 
-// 		method := c.Request.Method
+		// ignores when policy/secret not changed
+		if c.Writer.Status() != http.StatusOK || c.Request.Method == "GET" {
+			return
+		}
 
-// 		var resource string
+		var message string
+		if message = getPublishMsg(c.Request.URL.Path); message == "" {
+			return
+		}
 
-// 		pathSplit := strings.Split(c.Request.URL.Path, "/")
-// 		if len(pathSplit) > 2 {
-// 			resource = pathSplit[2]
-// 		}
+		if err := redis.Client().Publish(c, RedisPubSubChannel, message); err != nil {
+			log.Printf("Publish error: channel=%s, message=%s", RedisPubSubChannel, message)
+		}
+	}
+}
 
-// 		switch resource {
-// 		case "policies":
-// 			notify(c, method, load.NoticePolicyChanged)
-// 		case "secrets":
-// 			notify(c, method, load.NoticeSecretChanged)
-// 		default:
-// 		}
-// 	}
-// }
+func getPublishMsg(URI string) string {
+	var resource string
+	pathSplit := strings.Split(URI, "/")
+	if len(pathSplit) > 2 {
+		resource = pathSplit[2]
+	}
 
-// func notify(ctx context.Context, method string, command load.NotificationCommand) {
-// 	switch method {
-// 	case "POST", "PUT", "DELETE":
-// 		redisStore := cache.Cache()
-// 		message, _ := json.Marshal(load.Notification{Command: command})
+	var message string
+	switch resource {
+	case "policies":
+		message = NoticePolicyChanged
+	case "secrets":
+		message = NoticeSecretChanged
+	default:
+	}
 
-// 		if err := redisStore.Publish(load.RedisPubSubChannel, string(message)); err != nil {
-// 			log.Printf("publish redis message failed", "error", err.Error())
-// 		}
-// 		log.Printf("publish redis message", "method", method, "command", command)
-// 	default:
-// 	}
-// }
+	return message
+}
