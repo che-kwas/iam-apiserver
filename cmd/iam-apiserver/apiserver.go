@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"iam-apiserver/internal/apiserver"
-	"iam-apiserver/internal/apiserver/config"
+	"iam-apiserver/internal/pkg/config"
 )
 
 var (

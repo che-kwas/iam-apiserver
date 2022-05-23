@@ -5,9 +5,9 @@ import (
 
 	"github.com/che-kwas/iam-kit/server"
 
-	"iam-apiserver/internal/apiserver/config"
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/apiserver/store/mysql"
+	"iam-apiserver/internal/pkg/config"
 )
 
 type apiServer struct {

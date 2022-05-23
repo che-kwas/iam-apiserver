@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
-	"iam-apiserver/internal/apiserver/config"
 	"iam-apiserver/internal/apiserver/store"
+	"iam-apiserver/internal/pkg/config"
 )
 
 type datastore struct {

@@ -7,7 +7,7 @@ import (
 	"github.com/che-kwas/iam-kit/cache"
 	"github.com/go-redis/redis/v8"
 
-	"iam-apiserver/internal/apiserver/config"
+	"iam-apiserver/internal/pkg/config"
 )
 
 var (
