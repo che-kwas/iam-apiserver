@@ -7,10 +7,10 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/che-kwas/iam-kit/config"
 	"github.com/spf13/pflag"
 
 	"iam-apiserver/internal/apiserver"
-	"iam-apiserver/internal/pkg/config"
 )
 
 var (
@@ -29,7 +29,7 @@ func main() {
 		return
 	}
 
-	if err := config.InitConfig(*cfg, name); err != nil {
+	if err := config.LoadConfig(*cfg, name); err != nil {
 		log.Fatal("Initializa config failed: ", err)
 	}
 

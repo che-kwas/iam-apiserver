@@ -4,29 +4,22 @@ package redis
 import (
 	"sync"
 
-	"github.com/go-redis/redis/v8"
-
-	"iam-apiserver/internal/pkg/config"
+	"github.com/che-kwas/iam-kit/redis"
+	redisv8 "github.com/go-redis/redis/v8"
 )
 
 var (
-	rdb  redis.UniversalClient
+	rdb  redisv8.UniversalClient
 	once sync.Once
 )
 
-// Client returns the global redis client.
-func Client() redis.UniversalClient {
+func Client() redisv8.UniversalClient {
 	if rdb != nil {
 		return rdb
 	}
 
 	once.Do(func() {
-		opts := config.Cfg().RedisOpts
-		rdb = redis.NewUniversalClient(&redis.UniversalOptions{
-			Addrs:    opts.Addrs,
-			Password: opts.Password,
-			DB:       opts.Database,
-		})
+		rdb, _ = redis.NewRedisIns()
 	})
 
 	return rdb

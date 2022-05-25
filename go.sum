@@ -51,8 +51,8 @@ github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/cespare/xxhash/v2 v2.1.2 h1:YRXhKfTDauu4ajMg1TPgFO5jnlC2HCbmLXMcTG5cbYE=
 github.com/cespare/xxhash/v2 v2.1.2/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
-github.com/che-kwas/iam-kit v0.1.5 h1:9e235kBJValjmFAg2iQRtd7gETSB1bKCi8/Wllly6d8=
-github.com/che-kwas/iam-kit v0.1.5/go.mod h1:nDKnTeciU65T77xIoVZNT6X32GkIrHw7GfRdEEJVJRg=
+github.com/che-kwas/iam-kit v0.1.8 h1:UxupJWy0JdQGFu7mIuNQiZsuHn/+CLxHj4K1izvEZq8=
+github.com/che-kwas/iam-kit v0.1.8/go.mod h1:nDKnTeciU65T77xIoVZNT6X32GkIrHw7GfRdEEJVJRg=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=

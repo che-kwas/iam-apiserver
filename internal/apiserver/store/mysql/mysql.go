@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/che-kwas/iam-kit/db"
+	"github.com/che-kwas/iam-kit/mysql"
 	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
-	"iam-apiserver/internal/pkg/config"
 )
 
 type datastore struct {
@@ -53,7 +52,7 @@ func MySQLStore() (store.Store, error) {
 	var err error
 	var dbIns *gorm.DB
 	once.Do(func() {
-		dbIns, err = db.NewMysqlIns(config.Cfg().MysqlOpts)
+		dbIns, err = mysql.NewMysqlIns()
 		mysqlStore = &datastore{dbIns}
 	})
 

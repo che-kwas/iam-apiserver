@@ -19,12 +19,24 @@ import (
 	"iam-apiserver/internal/apiserver/store"
 )
 
-const JWTIssuer = "iam-apiserver"
+const (
+	JWTIssuer = "iam-apiserver"
+
+	ConfKeyJWT           = "jwt"
+	DefaultJWTTimeout    = time.Duration(24 * time.Second)
+	DefaultJWTMaxRefresh = time.Duration(24 * time.Second)
+)
 
 var (
 	ErrInvalidHeader = errors.New("invalid header")
 )
 
+// JWTOptions defines options for building a GinJWTMiddleware.
+type JWTOptions struct {
+	Key        string
+	Timeout    time.Duration
+	MaxRefresh time.Duration `mapstructure:"max-refresh"`
+}
 type loginInfo struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -51,12 +63,14 @@ func newBasicAuth() middleware.AuthStrategy {
 }
 
 func newJWTAuth() middleware.AuthStrategy {
+	opts := getJWTOptions()
+
 	ginjwt, _ := ginjwt.New(&ginjwt.GinJWTMiddleware{
 		Realm:            "IAM",
 		SigningAlgorithm: "HS256",
-		Key:              []byte(viper.GetString("jwt.key")),
-		Timeout:          viper.GetDuration("jwt.timeout"),
-		MaxRefresh:       viper.GetDuration("jwt.max-refresh"),
+		Key:              []byte(opts.Key),
+		Timeout:          opts.Timeout,
+		MaxRefresh:       opts.MaxRefresh,
 		Authenticator:    authenticator(),
 		LoginResponse:    loginResponse(),
 		LogoutResponse:   logoutResponse(),
@@ -184,4 +198,14 @@ func unauthorizedHandler() func(c *gin.Context, code int, message string) {
 			"message": message,
 		})
 	}
+}
+
+func getJWTOptions() *JWTOptions {
+	opts := &JWTOptions{
+		Timeout:    DefaultJWTTimeout,
+		MaxRefresh: DefaultJWTMaxRefresh,
+	}
+
+	_ = viper.UnmarshalKey(ConfKeyJWT, opts)
+	return opts
 }

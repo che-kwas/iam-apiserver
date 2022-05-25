@@ -32,9 +32,10 @@ func Publish() gin.HandlerFunc {
 			return
 		}
 
-		if err := redis.Client().Publish(c, RedisPubSubChannel, message); err != nil {
-			log.Printf("Publish error: channel=%s, message=%s", RedisPubSubChannel, message)
+		if err := redis.Client().Publish(c, RedisPubSubChannel, message).Err(); err != nil {
+			log.Printf("Publish error: %v", err)
 		}
+		log.Printf("Publish: %s - %s", RedisPubSubChannel, message)
 	}
 }
 

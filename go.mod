@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/AlekSi/pointer v1.1.0
 	github.com/appleboy/gin-jwt/v2 v2.8.0
-	github.com/che-kwas/iam-kit v0.1.5
+	github.com/che-kwas/iam-kit v0.1.8
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/marmotedu/errors v1.0.2

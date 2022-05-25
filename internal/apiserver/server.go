@@ -7,20 +7,20 @@ import (
 
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/apiserver/store/mysql"
-	"iam-apiserver/internal/pkg/config"
 )
 
 type apiServer struct {
 	*server.Server
 	name string
-	err  error
+
+	err error
 }
 
 // NewServer builds a new apiServer.
 func NewServer(name string) *apiServer {
 	s := &apiServer{name: name}
 
-	return s.initStore().initCache().build()
+	return s.initStore().newServer().registerRouter()
 }
 
 // Run runs the apiServer.
@@ -35,10 +35,6 @@ func (s *apiServer) Run() {
 }
 
 func (s *apiServer) initStore() *apiServer {
-	if s.err != nil {
-		return s
-	}
-
 	var storeIns store.Store
 	storeIns, s.err = mysql.MySQLStore()
 	if s.err != nil {
@@ -49,21 +45,16 @@ func (s *apiServer) initStore() *apiServer {
 	return s
 }
 
-func (s *apiServer) initCache() *apiServer {
+func (s *apiServer) newServer() *apiServer {
 	if s.err != nil {
 		return s
 	}
 
+	s.Server, s.err = server.NewServer(s.name)
 	return s
 }
 
-func (s *apiServer) build() *apiServer {
-	if s.err != nil {
-		return s
-	}
-
-	cfg := config.Cfg()
-	s.Server, s.err = server.NewServer(s.name, cfg.HTTPOpts, cfg.GRPCOpts)
+func (s *apiServer) registerRouter() *apiServer {
 	if s.err != nil {
 		return s
 	}

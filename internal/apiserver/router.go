@@ -2,10 +2,6 @@ package apiserver
 
 import (
 	"fmt"
-	"iam-apiserver/internal/apiserver/controller/policy"
-	"iam-apiserver/internal/apiserver/controller/secret"
-	"iam-apiserver/internal/apiserver/controller/user"
-	"iam-apiserver/internal/apiserver/store"
 
 	"github.com/che-kwas/iam-kit/code"
 	"github.com/che-kwas/iam-kit/httputil"
@@ -13,6 +9,12 @@ import (
 	"github.com/che-kwas/iam-kit/middleware/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/errors"
+
+	"iam-apiserver/internal/apiserver/controller/policy"
+	"iam-apiserver/internal/apiserver/controller/secret"
+	"iam-apiserver/internal/apiserver/controller/user"
+	"iam-apiserver/internal/apiserver/store"
+	mdw "iam-apiserver/internal/pkg/middleware"
 )
 
 func initRouter(g *gin.Engine) {
@@ -44,7 +46,7 @@ func initRouter(g *gin.Engine) {
 
 		v1.Use(auto.AuthFunc())
 
-		secretv1 := v1.Group("/secrets")
+		secretv1 := v1.Group("/secrets", mdw.Publish())
 		{
 			secretController := secret.NewSecretController()
 
@@ -55,7 +57,7 @@ func initRouter(g *gin.Engine) {
 			secretv1.GET("", secretController.List)
 		}
 
-		policyv1 := v1.Group("/policies")
+		policyv1 := v1.Group("/policies", mdw.Publish())
 		{
 			policyController := policy.NewPolicyController()
 
