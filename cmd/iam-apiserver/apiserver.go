@@ -1,5 +1,4 @@
-// The IAM API server manages the api objects including users, policies, secrets and more.
-
+// iam-apiserver manages the api objects including users, policies, secrets.
 package main
 
 import (
