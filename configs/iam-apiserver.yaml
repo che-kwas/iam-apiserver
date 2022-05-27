@@ -5,6 +5,12 @@ http:
   metrics: false # 是否开启 metrics, router: /metrics，默认 false
   profiling: false # 是否开启性能分析, router: /debug/pprof，默认 false
   ping-timeout: 10s # http 服务启动后，自检超时时间，默认 10s
+  middlewares: # 加载的 gin 中间件列表
+    - recovery
+    - logger
+    - secure
+    - nocache
+    - cors
 
 grpc:
   addr: 0.0.0.0:8001 # 默认 0.0.0.0:8001
@@ -25,6 +31,15 @@ mysql:
   max-conn-life-time: 10s # 空闲连接最大存活时间，默认 10s
 
 redis:
-  addrs: ["127.0.0.1:6379"] # 1个addr为单节点模式，多个addrs为cluster模式
+  addrs:
+    - "127.0.0.1:6379" # 1个addr为单节点模式，多个addrs为cluster模式
   password: "774411"
   database: 1
+
+log:
+  level: debug # 日志级别，debug, info, warn, error, dpanic, panic, fatal。
+  encoding: json # 输出格式，console, json。
+  output-path: /var/log/iam-apiserver/iam-apiserver.log
+  max-size: 100 # mb，日志文件最大值，超过此值会被rotated
+  max-age: 30 # days，历史日志文件保留天数
+  max-backups: 30 # 最大历史日志文件数
