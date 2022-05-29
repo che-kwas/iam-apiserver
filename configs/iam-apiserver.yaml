@@ -5,12 +5,6 @@ http:
   metrics: false # 是否开启 metrics, router: /metrics，默认 false
   profiling: false # 是否开启性能分析, router: /debug/pprof，默认 false
   ping-timeout: 10s # http 服务启动后，自检超时时间，默认 10s
-  middlewares: # 加载的 gin 中间件列表
-    - recovery
-    - logger
-    - secure
-    - nocache
-    - cors
 
 grpc:
   addr: 0.0.0.0:8001 # 默认 0.0.0.0:8001
@@ -29,6 +23,8 @@ mysql:
   max-idle-conns: 100 # MySQL 最大空闲连接数，默认 100
   max-open-conns: 100 # MySQL 最大打开的连接数，默认 100
   max-conn-life-time: 10s # 空闲连接最大存活时间，默认 10s
+  slow-threshold: 200ms # 慢SQL阈值
+  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 redis:
   addrs:
@@ -38,7 +34,7 @@ redis:
 
 log:
   level: debug # 日志级别，debug, info, warn, error, dpanic, panic, fatal。
-  encoding: json # 输出格式，console, json。
+  encoding: console # 输出格式，console, json。
   output-path: /var/log/iam-apiserver/iam-apiserver.log
   max-size: 100 # mb，日志文件最大值，超过此值会被rotated
   max-age: 30 # days，历史日志文件保留天数

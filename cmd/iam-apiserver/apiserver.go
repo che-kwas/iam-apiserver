@@ -2,7 +2,6 @@
 package main
 
 import (
-	"log"
 	"math/rand"
 	"time"
 
@@ -29,7 +28,7 @@ func main() {
 	}
 
 	if err := config.LoadConfig(*cfg, name); err != nil {
-		log.Fatal("Failed to load configuration: ", err)
+		panic(err)
 	}
 
 	apiserver.NewServer(name).Run()

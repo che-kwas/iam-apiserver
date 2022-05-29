@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -102,12 +101,10 @@ func authenticator() func(c *gin.Context) (interface{}, error) {
 
 		user, err := store.Client().Users().Get(c, login.Username)
 		if err != nil {
-			log.Print("Authentication failed: username error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
 		if !user.VerifyPassword(login.Password) {
-			log.Print("Authentication failed: password error.")
 			return nil, ginjwt.ErrFailedAuthentication
 		}
 
@@ -182,9 +179,7 @@ func identityHandler() func(c *gin.Context) interface{} {
 
 func authorizator() func(data interface{}, c *gin.Context) bool {
 	return func(data interface{}, c *gin.Context) bool {
-		if v, ok := data.(string); ok {
-			log.Printf("user `%s` is authenticated.", v)
-
+		if _, ok := data.(string); ok {
 			return true
 		}
 

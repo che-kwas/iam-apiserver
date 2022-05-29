@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 	"strings"
 
+	"github.com/che-kwas/iam-kit/logger"
 	"github.com/gin-gonic/gin"
 
 	"iam-apiserver/internal/pkg/redis"
@@ -33,9 +33,9 @@ func Publish() gin.HandlerFunc {
 		}
 
 		if err := redis.Client().Publish(c, RedisPubSubChannel, message).Err(); err != nil {
-			log.Printf("Publish error: %v", err)
+			logger.L().X(c).Errorw("publish", "error", err.Error())
 		}
-		log.Printf("Publish: %s - %s", RedisPubSubChannel, message)
+		logger.L().X(c).Debugw("publish", "message", message, "method", c.Request.Method)
 	}
 }
 

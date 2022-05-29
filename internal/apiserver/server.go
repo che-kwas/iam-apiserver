@@ -1,8 +1,7 @@
 package apiserver
 
 import (
-	"log"
-
+	"github.com/che-kwas/iam-kit/logger"
 	"github.com/che-kwas/iam-kit/server"
 
 	"iam-apiserver/internal/apiserver/store"
@@ -12,25 +11,31 @@ import (
 type apiServer struct {
 	*server.Server
 	name string
+	log  *logger.Logger
 
 	err error
 }
 
 // NewServer builds a new apiServer.
 func NewServer(name string) *apiServer {
-	s := &apiServer{name: name}
+	s := &apiServer{
+		name: name,
+		log:  logger.L(),
+	}
 
 	return s.initStore().newServer().registerRouter()
 }
 
 // Run runs the apiServer.
 func (s *apiServer) Run() {
+	s.log.Sync()
+
 	if s.err != nil {
-		log.Fatal("Build server error: ", s.err)
+		s.log.Fatal("Build server error: ", s.err)
 	}
 
 	if err := s.Server.Run(); err != nil {
-		log.Fatal("Server stopped unexpectedly: ", err)
+		s.log.Fatal("Server stopped unexpectedly: ", err)
 	}
 }
 
