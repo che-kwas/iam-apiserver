@@ -24,7 +24,7 @@ mysql:
   max-open-conns: 100 # MySQL 最大打开的连接数，默认 100
   max-conn-life-time: 10s # 空闲连接最大存活时间，默认 10s
   slow-threshold: 200ms # 慢SQL阈值
-  log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
+  log-level: 1 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 redis:
   addrs:
@@ -33,8 +33,9 @@ redis:
   database: 1
 
 log:
-  level: debug # 日志级别，debug, info, warn, error, dpanic, panic, fatal。
-  encoding: console # 输出格式，console, json。
+  level: debug # 日志级别，debug, info, warn, error, dpanic, panic, fatal
+  encoding: console # 输出格式，console, json
+  disable-caller: true # 输出日志时是否关闭调用日志的文件和行号
   output-path: /var/log/iam-apiserver/iam-apiserver.log
   max-size: 100 # mb，日志文件最大值，超过此值会被rotated
   max-age: 30 # days，历史日志文件保留天数
