@@ -3,10 +3,12 @@
 # ==============================================================================
 # Build options
 
-VERSION      := $(shell git describe --tags --always)
-OUTPUT_DIR   := ./_output
-GO_LDFLAGS   += -X main.Version=$(VERSION)
-MAKEFLAGS    += --no-print-directory
+VERSION      = $(shell git describe --tags --always)
+OUTPUT_DIR   = ./_output
+PROTO_DIR    = ./api/apiserver/proto
+PROTO_FILES  = $(shell find ${PROTO_DIR} -name *.proto)
+GO_LDFLAGS  += -X main.Version=$(VERSION)
+MAKEFLAGS   += --no-print-directory
 
 # ==============================================================================
 # Includes
@@ -18,7 +20,7 @@ include make-rules/tools.mk
 
 ## all: Build all.
 .PHONY: all
-all: lint gen test build
+all: lint api error test build
 
 ## lint: Check syntax and styling of go sources.
 .PHONY: lint
@@ -26,9 +28,17 @@ lint: tools.verify.golangci-lint
 	go mod tidy -compat=1.17
 	golangci-lint run ./...
 
-## gen: Generate error code and document.
-.PHONY: gen
-gen: tools.verify.codegen
+## api: Generate api proto.
+.PHONY: api
+api:
+	protoc --proto_path=$(PROTO_DIR) \
+	       --go_out=paths=source_relative:$(PROTO_DIR) \
+	       --go-grpc_out=paths=source_relative:$(PROTO_DIR) \
+	       $(PROTO_FILES)
+
+## error: Generate error code.
+.PHONY: error
+error: tools.verify.codegen
 	codegen ./internal/pkg/code
 	codegen -doc -output ./docs/error_code.md ./internal/pkg/code
 

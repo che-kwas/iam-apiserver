@@ -31,11 +31,11 @@ func (s *apiServer) Run() {
 	s.log.Sync()
 
 	if s.err != nil {
-		s.log.Fatal("Build server error: ", s.err)
+		s.log.Fatal("failed to build the server: ", s.err)
 	}
 
 	if err := s.Server.Run(); err != nil {
-		s.log.Fatal("Server stopped unexpectedly: ", err)
+		s.log.Fatal("server stopped unexpectedly: ", err)
 	}
 }
 
