@@ -55,7 +55,7 @@ func (s *apiServer) newServer() *apiServer {
 		return s
 	}
 
-	s.Server, s.err = server.NewServer(s.name)
+	s.Server, s.err = server.NewServer(s.name, server.WithGRPC())
 	return s
 }
 

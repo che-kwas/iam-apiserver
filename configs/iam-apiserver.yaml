@@ -30,7 +30,7 @@ redis:
   addrs:
     - "127.0.0.1:6379" # 1个addr为单节点模式，多个addrs为cluster模式
   password: "774411"
-  database: 1
+  database: 0
 
 log:
   level: debug # 日志级别，debug, info, warn, error, dpanic, panic, fatal
