@@ -60,7 +60,6 @@ func MySQLStore() (store.Store, error) {
 		return nil, fmt.Errorf("failed to get mysql store fatory: %v", err)
 	}
 
-	// TODO manual migrate
 	autoMigrate(dbIns)
 
 	return mysqlStore, nil
