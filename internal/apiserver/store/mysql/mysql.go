@@ -43,7 +43,7 @@ var (
 	once       sync.Once
 )
 
-// MySQLStore returns a mysql store.
+// MySQLStore returns a mysql store instance.
 func MySQLStore() (store.Store, error) {
 	if mysqlStore != nil {
 		return mysqlStore, nil
@@ -57,7 +57,7 @@ func MySQLStore() (store.Store, error) {
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to get mysql store fatory: %v", err)
+		return nil, fmt.Errorf("failed to connect to mysql: %v", err)
 	}
 
 	autoMigrate(dbIns)

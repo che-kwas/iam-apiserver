@@ -34,7 +34,8 @@ func NewServer(name string) *apiServer {
 
 // Run runs the apiServer.
 func (s *apiServer) Run() {
-	s.log.Sync()
+	defer s.log.Sync()
+	defer store.Client().Close()
 
 	if s.err != nil {
 		s.log.Fatal("failed to build the server: ", s.err)

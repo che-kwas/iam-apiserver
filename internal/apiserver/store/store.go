@@ -13,12 +13,12 @@ type Store interface {
 	Close() error
 }
 
-// Client return the store client.
+// Client returns the store client.
 func Client() Store {
 	return client
 }
 
-// SetClient set the store client.
+// SetClient sets the store client.
 func SetClient(store Store) {
 	client = store
 }
