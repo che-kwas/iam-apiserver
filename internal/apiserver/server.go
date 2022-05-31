@@ -3,7 +3,10 @@ package apiserver
 import (
 	"github.com/che-kwas/iam-kit/logger"
 	"github.com/che-kwas/iam-kit/server"
+	"google.golang.org/grpc/reflection"
 
+	pb "iam-apiserver/api/apiserver/proto/v1"
+	"iam-apiserver/internal/apiserver/controller/cache"
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/apiserver/store/mysql"
 )
@@ -23,7 +26,10 @@ func NewServer(name string) *apiServer {
 		log:  logger.L(),
 	}
 
-	return s.initStore().newServer().registerRouter()
+	return s.initStore().
+		newServer().
+		setupHTTP().
+		setupGRPC()
 }
 
 // Run runs the apiServer.
@@ -41,12 +47,11 @@ func (s *apiServer) Run() {
 
 func (s *apiServer) initStore() *apiServer {
 	var storeIns store.Store
-	storeIns, s.err = mysql.MySQLStore()
-	if s.err != nil {
+	if storeIns, s.err = mysql.MySQLStore(); s.err != nil {
 		return s
 	}
-
 	store.SetClient(storeIns)
+
 	return s
 }
 
@@ -59,11 +64,23 @@ func (s *apiServer) newServer() *apiServer {
 	return s
 }
 
-func (s *apiServer) registerRouter() *apiServer {
+func (s *apiServer) setupHTTP() *apiServer {
 	if s.err != nil {
 		return s
 	}
 
-	s.InitRouter(initRouter)
+	initRouter(s.Server.HTTPServer.Engine)
+	return s
+}
+
+func (s *apiServer) setupGRPC() *apiServer {
+	if s.err != nil {
+		return s
+	}
+
+	ctrl := cache.NewCacheController()
+	pb.RegisterCacheServer(s.GRPCServer, ctrl)
+	reflection.Register(s.GRPCServer)
+
 	return s
 }

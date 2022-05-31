@@ -1,4 +1,4 @@
-// Package secret implements the secret handler.
+// Package secret is the secret controller.
 package secret
 
 import (
@@ -20,7 +20,7 @@ type SecretController struct {
 	log *logger.Logger
 }
 
-// NewSecretController creates a secret handler.
+// NewSecretController creates a secret controller.
 func NewSecretController() *SecretController {
 	return &SecretController{
 		srv: service.NewService(),

@@ -1,4 +1,4 @@
-// Package policy implements the policy handler.
+// Package policy is the policy controller.
 package policy
 
 import (
@@ -20,7 +20,7 @@ type PolicyController struct {
 	log *logger.Logger
 }
 
-// NewPolicyController creates a policy handler.
+// NewPolicyController creates a policy controller.
 func NewPolicyController() *PolicyController {
 	return &PolicyController{
 		srv: service.NewService(),

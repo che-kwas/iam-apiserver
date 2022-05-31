@@ -1,4 +1,4 @@
-// Package user implements the user handler.
+// Package user is the user controller.
 package user
 
 import (
@@ -19,7 +19,7 @@ type UserController struct {
 	log *logger.Logger
 }
 
-// NewUserController creates a user handler.
+// NewUserController creates a user controller.
 func NewUserController() *UserController {
 	return &UserController{
 		srv: service.NewService(),
