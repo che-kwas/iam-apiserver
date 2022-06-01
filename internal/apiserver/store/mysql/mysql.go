@@ -2,7 +2,6 @@
 package mysql
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/che-kwas/iam-kit/mysql"
@@ -57,7 +56,7 @@ func MySQLStore() (store.Store, error) {
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect to mysql: %v", err)
+		return nil, errors.Wrap(err, "failed to connect to mysql")
 	}
 
 	autoMigrate(dbIns)
