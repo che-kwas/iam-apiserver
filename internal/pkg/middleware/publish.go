@@ -12,9 +12,9 @@ import (
 
 // Redis pub/sub events.
 const (
-	RedisPubSubChannel  = "iam.notifications"
-	NoticePolicyChanged = "PolicyChanged"
-	NoticeSecretChanged = "SecretChanged"
+	channel            = "iam.notifications"
+	eventPolicyChanged = "PolicyChanged"
+	eventSecretChanged = "SecretChanged"
 )
 
 // Publish publishes a event to specified redis channel when policy/secret changed.
@@ -32,7 +32,7 @@ func Publish() gin.HandlerFunc {
 			return
 		}
 
-		if err := redis.Client().Publish(c, RedisPubSubChannel, message).Err(); err != nil {
+		if err := redis.Client().Publish(c, channel, message).Err(); err != nil {
 			logger.L().X(c).Errorw("publish", "error", err.Error())
 		}
 		logger.L().X(c).Debugw("publish", "message", message, "method", c.Request.Method)
@@ -49,9 +49,9 @@ func getPublishMsg(URI string) string {
 	var message string
 	switch resource {
 	case "policies":
-		message = NoticePolicyChanged
+		message = eventPolicyChanged
 	case "secrets":
-		message = NoticeSecretChanged
+		message = eventSecretChanged
 	default:
 	}
 
