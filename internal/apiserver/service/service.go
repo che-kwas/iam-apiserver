@@ -1,4 +1,4 @@
-// Package service is the core business logic.
+// Package service defines the core business logic.
 package service
 
 import "iam-apiserver/internal/apiserver/store"
