@@ -26,10 +26,7 @@ func NewServer(name string) *apiServer {
 		log:  logger.L(),
 	}
 
-	return s.initStore().
-		newServer().
-		setupHTTP().
-		setupGRPC()
+	return s.initStore().newServer().setupHTTP().setupGRPC()
 }
 
 // Run runs the apiServer.
