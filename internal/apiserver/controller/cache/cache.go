@@ -34,13 +34,11 @@ func NewCacheController() *CacheController {
 
 // ListSecrets returns all secrets.
 func (c *CacheController) ListSecrets(ctx context.Context, r *pb.ListSecretsRequest) (*pb.ListSecretsResponse, error) {
-	c.log.X(ctx).Info("secret list")
-
 	opts := meta.ListOptions{
 		Offset: pointer.ToInt(int(r.Offset)),
 		Limit:  pointer.ToInt(int(r.Limit)),
 	}
-	c.log.Debugf("secret list params: %+v", opts)
+	c.log.X(ctx).Debugf("secret list params: %+v", opts)
 
 	secrets, err := c.srv.Secrets().List(ctx, "", opts)
 	if err != nil {
@@ -68,13 +66,11 @@ func (c *CacheController) ListSecrets(ctx context.Context, r *pb.ListSecretsRequ
 
 // ListPolicies returns all policies.
 func (c *CacheController) ListPolicies(ctx context.Context, r *pb.ListPoliciesRequest) (*pb.ListPoliciesResponse, error) {
-	c.log.X(ctx).Info("policy list")
-
 	opts := meta.ListOptions{
 		Offset: pointer.ToInt(int(r.Offset)),
 		Limit:  pointer.ToInt(int(r.Limit)),
 	}
-	c.log.Debugf("policy list params: %+v", opts)
+	c.log.X(ctx).Debugf("policy list params: %+v", opts)
 
 	policies, err := c.srv.Policies().List(ctx, "", opts)
 	if err != nil {
