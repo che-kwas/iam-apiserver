@@ -38,7 +38,7 @@ func (c *CacheController) ListSecrets(ctx context.Context, r *pb.ListSecretsRequ
 		Offset: pointer.ToInt(int(r.Offset)),
 		Limit:  pointer.ToInt(int(r.Limit)),
 	}
-	c.log.X(ctx).Debugf("secret list params: %+v", opts)
+	c.log.X(ctx).Infow("secret list params", "offset", r.Offset, "limit", r.Limit)
 
 	secrets, err := c.srv.Secrets().List(ctx, "", opts)
 	if err != nil {
@@ -70,7 +70,7 @@ func (c *CacheController) ListPolicies(ctx context.Context, r *pb.ListPoliciesRe
 		Offset: pointer.ToInt(int(r.Offset)),
 		Limit:  pointer.ToInt(int(r.Limit)),
 	}
-	c.log.X(ctx).Debugf("policy list params: %+v", opts)
+	c.log.X(ctx).Infow("policy list params", "offset", r.Offset, "limit", r.Limit)
 
 	policies, err := c.srv.Policies().List(ctx, "", opts)
 	if err != nil {

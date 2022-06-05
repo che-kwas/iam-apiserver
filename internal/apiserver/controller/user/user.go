@@ -34,7 +34,7 @@ func (u *UserController) Create(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
-	u.log.X(c).Debugf("user create params: %+v", user)
+	u.log.X(c).Infow("user create params", "user", user)
 
 	err := u.srv.Users().Create(c, user)
 	httputil.WriteResponse(c, err, user)
@@ -42,10 +42,10 @@ func (u *UserController) Create(c *gin.Context) {
 
 // Get gets the user by the user identifier.
 func (u *UserController) Get(c *gin.Context) {
-	username := c.Param("name")
-	u.log.X(c).Debugf("user get params: %s", username)
+	name := c.Param("name")
+	u.log.X(c).Infow("user get params", "name", name)
 
-	user, err := u.srv.Users().Get(c, username)
+	user, err := u.srv.Users().Get(c, name)
 
 	httputil.WriteResponse(c, err, user)
 }
@@ -57,7 +57,7 @@ func (u *UserController) Update(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
-	u.log.X(c).Debugf("user update params: %+v", params)
+	u.log.X(c).Infow("user update params", "params", params)
 
 	err := u.srv.Users().Update(c, c.Param("name"), params)
 	httputil.WriteResponse(c, err, nil)
@@ -76,7 +76,7 @@ func (u *UserController) ChangePassword(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
-	u.log.X(c).Debugf("user change-password params: %+v", params)
+	u.log.X(c).Infow("user change-password params", "params", params)
 
 	err := u.srv.Users().ChangePassword(c, c.Param("name"), params.OldPassword, params.NewPassword)
 	httputil.WriteResponse(c, err, nil)
@@ -89,7 +89,7 @@ func (u *UserController) List(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
-	u.log.X(c).Debugf("user list params: %+v", opts)
+	u.log.X(c).Infow("user list params", "offset", opts.Offset, "limit", opts.Limit)
 
 	users, err := u.srv.Users().List(c, opts)
 	httputil.WriteResponse(c, err, users)
@@ -97,18 +97,18 @@ func (u *UserController) List(c *gin.Context) {
 
 // Delete deletes a user by the user identifier.
 func (u *UserController) Delete(c *gin.Context) {
-	username := c.Param("name")
-	u.log.X(c).Debugf("user delete params: %s", username)
+	name := c.Param("name")
+	u.log.X(c).Infow("user delete params", "name", name)
 
-	err := u.srv.Users().Delete(c, username)
+	err := u.srv.Users().Delete(c, name)
 	httputil.WriteResponse(c, err, nil)
 }
 
 // DeleteCollection batch delete users by usernames.
 func (u *UserController) DeleteCollection(c *gin.Context) {
-	usernames := c.QueryArray("name")
-	u.log.X(c).Debugf("user delete-collection params: %v", usernames)
+	names := c.QueryArray("name")
+	u.log.X(c).Infow("user delete-collection params", "names", names)
 
-	err := u.srv.Users().DeleteCollection(c, usernames)
+	err := u.srv.Users().DeleteCollection(c, names)
 	httputil.WriteResponse(c, err, nil)
 }

@@ -35,7 +35,7 @@ func (s *SecretController) Create(c *gin.Context) {
 		httputil.WriteResponse(c, errors.WithCode(basecode.ErrBadParams, err.Error()), nil)
 		return
 	}
-	s.log.X(c).Debugf("secret create params: %+v", secret)
+	s.log.X(c).Infow("secret create param", "secret", secret)
 
 	username := c.GetString(middleware.UsernameKey)
 	err := s.srv.Secrets().Create(c, username, secret)
@@ -46,7 +46,7 @@ func (s *SecretController) Create(c *gin.Context) {
 func (s *SecretController) Get(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	s.log.X(c).Debugf("secret get params: %s, %s", username, name)
+	s.log.X(c).Infow("secret get params", "name", name)
 
 	secret, err := s.srv.Secrets().Get(c, username, name)
 
@@ -62,7 +62,7 @@ func (s *SecretController) Update(c *gin.Context) {
 	}
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	s.log.X(c).Debugf("secret update params: %s, %s, %+v", username, name, params)
+	s.log.X(c).Infow("secret update params", "name", name, "params", params)
 
 	err := s.srv.Secrets().Update(c, username, name, params)
 	httputil.WriteResponse(c, err, nil)
@@ -76,7 +76,7 @@ func (s *SecretController) List(c *gin.Context) {
 		return
 	}
 	username := c.GetString(middleware.UsernameKey)
-	s.log.X(c).Debugf("secret list params: %s, %+v", username, opts)
+	s.log.X(c).Infow("secret list params", "offset", opts.Offset, "limit", opts.Limit)
 
 	secrets, err := s.srv.Secrets().List(c, username, opts)
 	httputil.WriteResponse(c, err, secrets)
@@ -86,7 +86,7 @@ func (s *SecretController) List(c *gin.Context) {
 func (s *SecretController) Delete(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	s.log.X(c).Debugf("secret delete params: %s, %s", username, name)
+	s.log.X(c).Infow("secret delete params", "name", name)
 
 	err := s.srv.Secrets().Delete(c, username, name)
 	httputil.WriteResponse(c, err, nil)
@@ -96,7 +96,7 @@ func (s *SecretController) Delete(c *gin.Context) {
 func (s *SecretController) DeleteCollection(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	names := c.QueryArray("name")
-	s.log.X(c).Debugf("secret delete-collection params: %s, %v", username, names)
+	s.log.X(c).Infow("secret delete-collection params", "names", names)
 
 	err := s.srv.Secrets().DeleteCollection(c, username, names)
 	httputil.WriteResponse(c, err, nil)

@@ -36,7 +36,7 @@ func (p *PolicyController) Create(c *gin.Context) {
 		return
 	}
 	username := c.GetString(middleware.UsernameKey)
-	p.log.X(c).Debugf("policy create params: %s, %+v", username, policy)
+	p.log.X(c).Infow("policy create params", "policy", policy)
 
 	err := p.srv.Policies().Create(c, username, policy)
 	httputil.WriteResponse(c, err, policy)
@@ -46,7 +46,7 @@ func (p *PolicyController) Create(c *gin.Context) {
 func (p *PolicyController) Get(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	p.log.X(c).Debugf("policy get params: %s, %s", username, name)
+	p.log.X(c).Infow("policy get params", "name", name)
 
 	policy, err := p.srv.Policies().Get(c, username, name)
 	httputil.WriteResponse(c, err, policy)
@@ -61,7 +61,7 @@ func (p *PolicyController) Update(c *gin.Context) {
 	}
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	p.log.X(c).Debugf("policy update params: %s, %s, %+v", username, name, params)
+	p.log.X(c).Infow("policy update params", "name", name, "params", params)
 
 	err := p.srv.Policies().Update(c, username, name, params)
 	httputil.WriteResponse(c, err, nil)
@@ -75,7 +75,7 @@ func (p *PolicyController) List(c *gin.Context) {
 		return
 	}
 	username := c.GetString(middleware.UsernameKey)
-	p.log.X(c).Debugf("policy list params: %s, %v", username, opts)
+	p.log.X(c).Infow("policy list params", "offset", opts.Offset, "limit", opts.Limit)
 
 	policies, err := p.srv.Policies().List(c, username, opts)
 	httputil.WriteResponse(c, err, policies)
@@ -85,7 +85,7 @@ func (p *PolicyController) List(c *gin.Context) {
 func (p *PolicyController) Delete(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	name := c.Param("name")
-	p.log.X(c).Debugf("policy delete params: %s, %s", username, name)
+	p.log.X(c).Infow("policy delete params", "name", name)
 
 	err := p.srv.Policies().Delete(c, username, name)
 	httputil.WriteResponse(c, err, nil)
@@ -95,7 +95,7 @@ func (p *PolicyController) Delete(c *gin.Context) {
 func (p *PolicyController) DeleteCollection(c *gin.Context) {
 	username := c.GetString(middleware.UsernameKey)
 	names := c.QueryArray("name")
-	p.log.X(c).Debugf("policy delete-collection params: %s, %v", username, names)
+	p.log.X(c).Infow("policy delete-collection params", "names", names)
 
 	err := p.srv.Policies().DeleteCollection(c, username, names)
 	httputil.WriteResponse(c, err, nil)
