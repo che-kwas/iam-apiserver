@@ -55,6 +55,5 @@
 
 ## TODO
 
-1. secret, policy group 添加`middleware.Publish`
-2. migrate db
-3. swagger
+- swagger
+- test
