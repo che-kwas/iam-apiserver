@@ -24,15 +24,6 @@ type Policy struct {
 	PolicyShadow string `json:"-" gorm:"column:policyShadow" validate:"omitempty"`
 }
 
-// PolicyList is the whole list of all policies which have been stored in stroage.
-type PolicyList struct {
-	// Standard list metadata.
-	meta.ListMeta `json:",inline"`
-
-	// List of policies.
-	Items []*Policy `json:"items"`
-}
-
 // BeforeCreate runs before create database record.
 func (p *Policy) BeforeCreate(tx *gorm.DB) error {
 	if err := p.ObjectMeta.BeforeCreate(tx); err != nil {
@@ -81,4 +72,13 @@ func (p *Policy) AfterFind(tx *gorm.DB) (err error) {
 	}
 
 	return nil
+}
+
+// PolicyList represents a collection of policies.
+type PolicyList struct {
+	// Standard list metadata.
+	meta.ListMeta `json:",inline"`
+
+	// List of policies.
+	Items []*Policy `json:"items"`
 }

@@ -25,14 +25,6 @@ type User struct {
 	IsActive    bool       `json:"isActive,omitempty"    gorm:"column:isActive;default:true"`
 }
 
-// UserList is the whole list of all users which have been stored in stroage.
-type UserList struct {
-	// Standard list metadata.
-	meta.ListMeta `json:",inline"`
-
-	Items []*User `json:"items"`
-}
-
 // AfterCreate runs after create database record.
 func (u *User) AfterCreate(tx *gorm.DB) error {
 	u.InstanceID = util.GetInstanceID(u.ID, "user-")
@@ -44,4 +36,12 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
 func (u *User) VerifyPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	return err == nil
+}
+
+// UserList represents a collection of users.
+type UserList struct {
+	// Standard list metadata.
+	meta.ListMeta `json:",inline"`
+
+	Items []*User `json:"items"`
 }

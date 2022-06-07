@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marmotedu/errors"
 
-	"iam-apiserver/internal/apiserver/controller/policy"
 	"iam-apiserver/internal/apiserver/controller/secret"
 	"iam-apiserver/internal/apiserver/controller/user"
 	"iam-apiserver/internal/apiserver/store"
@@ -52,21 +51,10 @@ func initRouter(g *gin.Engine) {
 
 			secretv1.POST("", secretController.Create)
 			secretv1.GET(":name", secretController.Get)
+			secretv1.GET(":name/token", secretController.GetToken)
 			secretv1.PUT(":name", secretController.Update)
 			secretv1.DELETE(":name", secretController.Delete)
 			secretv1.GET("", secretController.List)
-		}
-
-		policyv1 := v1.Group("/policies", mdw.Publish())
-		{
-			policyController := policy.NewPolicyController()
-
-			policyv1.POST("", policyController.Create)
-			policyv1.GET(":name", policyController.Get)
-			policyv1.PUT(":name", policyController.Update)
-			policyv1.DELETE(":name", policyController.Delete)
-			policyv1.GET("", policyController.List)
-			policyv1.DELETE("", policyController.DeleteCollection)
 		}
 	}
 }

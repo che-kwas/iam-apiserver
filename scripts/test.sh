@@ -101,8 +101,12 @@ test::secret()
   ${UCURL} "${Header}" "${token}" http://${SERVER_ADDR}/v1/secrets/secret0 \
     -d'{"expires":0,"description":"admin secret(modified)"}'; echo
 
-  # 6. 删除secret0密钥
-  echo -e '\033[32m6. delete secret\033[0m'
+  # 6. 获取Token
+  echo -e '\033[32m7. get token by secret\033[0m'
+  ${RCURL} "${token}" http://${SERVER_ADDR}/v1/secrets/secret0/token; echo
+
+  # 7. 删除secret0密钥
+  echo -e '\033[32m7. delete secret\033[0m'
   ${DCURL} "${token}" http://${SERVER_ADDR}/v1/secrets/secret0; echo
 
   echo -e '\033[32m/v1/secret test end==========\033[0m'

@@ -2,15 +2,18 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/AlekSi/pointer"
 	"github.com/che-kwas/iam-kit/meta"
 	"github.com/che-kwas/iam-kit/util"
 	"github.com/marmotedu/errors"
+	"github.com/spf13/viper"
 
 	v1 "iam-apiserver/api/apiserver/v1"
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/pkg/code"
+	"iam-apiserver/internal/pkg/token"
 )
 
 const (
@@ -22,10 +25,11 @@ const (
 // SecretSrv defines functions used to handle secret request.
 type SecretSrv interface {
 	Create(ctx context.Context, username string, secret *v1.Secret) error
-	Get(ctx context.Context, username, secretID string) (*v1.Secret, error)
-	Update(ctx context.Context, username, secretID string, params *v1.Secret) error
+	Get(ctx context.Context, username, name string) (*v1.Secret, error)
+	GetToken(ctx context.Context, username, name string) (*v1.Token, error)
+	Update(ctx context.Context, username, name string, params *v1.Secret) error
 	List(ctx context.Context, username string, opts meta.ListOptions) (*v1.SecretList, error)
-	Delete(ctx context.Context, username, secretID string) error
+	Delete(ctx context.Context, username, name string) error
 	DeleteCollection(ctx context.Context, username string, secretIDs []string) error
 }
 
@@ -60,12 +64,25 @@ func (s *secretService) Create(ctx context.Context, username string, secret *v1.
 	return s.store.Secrets().Create(ctx, secret)
 }
 
-func (s *secretService) Get(ctx context.Context, username, secretID string) (*v1.Secret, error) {
-	return s.store.Secrets().Get(ctx, username, secretID)
+func (s *secretService) Get(ctx context.Context, username, name string) (*v1.Secret, error) {
+	return s.store.Secrets().Get(ctx, username, name)
 }
 
-func (s *secretService) Update(ctx context.Context, username, secretID string, params *v1.Secret) error {
-	secret, err := s.store.Secrets().Get(ctx, username, secretID)
+func (s *secretService) GetToken(ctx context.Context, username, name string) (*v1.Token, error) {
+	secret, err := s.store.Secrets().Get(ctx, username, name)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := viper.GetDuration("jwt.timeout")
+	expire := time.Now().Add(timeout)
+	token, _ := token.GenToken(secret.SecretID, secret.SecretKey, expire)
+
+	return &v1.Token{Token: token, Expire: expire.Format(time.RFC3339)}, nil
+}
+
+func (s *secretService) Update(ctx context.Context, username, name string, params *v1.Secret) error {
+	secret, err := s.store.Secrets().Get(ctx, username, name)
 	if err != nil {
 		return err
 	}
@@ -81,8 +98,8 @@ func (s *secretService) List(ctx context.Context, username string, opts meta.Lis
 	return s.store.Secrets().List(ctx, username, opts)
 }
 
-func (s *secretService) Delete(ctx context.Context, username, secretID string) error {
-	return s.store.Secrets().Delete(ctx, username, secretID)
+func (s *secretService) Delete(ctx context.Context, username, name string) error {
+	return s.store.Secrets().Delete(ctx, username, name)
 }
 
 func (s *secretService) DeleteCollection(ctx context.Context, username string, secretIDs []string) error {

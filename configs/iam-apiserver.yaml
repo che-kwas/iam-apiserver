@@ -12,8 +12,8 @@ grpc:
 
 jwt:
   key: dfVpOK8LZeJLZHYmHdb1VdyRrACKpqoo # 服务端密钥
-  timeout: 24h # token 过期时间(小时), 默认24h
-  max-refresh: 24h # token 更新时间(小时), 默认24h
+  timeout: 2h # token 过期时间(小时), 默认24h
+  max-refresh: 2h # token 更新时间(小时), 默认24h
 
 mysql:
   addr: 127.0.0.1:3306 # 默认 127.0.0.1:3306

@@ -34,13 +34,14 @@
 
 ### 密钥相关接口
 
-| 接口名称                                                 | 接口功能     |
-| -------------------------------------------------------- | ------------ |
-| [POST /v1/secrets](./docs/secret.md#1-创建密钥)          | 创建密钥     |
-| [DELETE /v1/secrets/:name](./docs/secret.md#2-删除密钥)  | 删除密钥     |
-| [PUT /v1/secrets/:name](./docs/secret.md#3-修改密钥属性) | 修改密钥属性 |
-| [GET /v1/secrets/:name](./docs/secret.md#4-查询密钥信息) | 查询密钥信息 |
-| [GET /v1/secrets](./docs/secret.md#5-查询密钥列表)       | 查询密钥列表 |
+| 接口名称                                                              | 接口功能            |
+| --------------------------------------------------------------------- | ------------------- |
+| [POST /v1/secrets](./docs/secret.md#1-创建密钥)                       | 创建密钥            |
+| [DELETE /v1/secrets/:name](./docs/secret.md#2-删除密钥)               | 删除密钥            |
+| [PUT /v1/secrets/:name](./docs/secret.md#3-修改密钥属性)              | 修改密钥属性        |
+| [GET /v1/secrets/:name](./docs/secret.md#4-查询密钥信息)              | 查询密钥信息        |
+| [GET /v1/secrets/:name/token](./docs/secret.md#5-获取密钥签名的token) | 获取密钥签名的token |
+| [GET /v1/secrets](./docs/secret.md#6-查询密钥列表)                    | 查询密钥列表        |
 
 ### 策略相关接口
 
