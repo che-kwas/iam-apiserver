@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	secretLen      = 32
+	secretIDLen    = 36
+	secretKeyLen   = 32
 	maxSecretCount = 10
 )
 
@@ -50,8 +51,8 @@ func (s *secretService) Create(ctx context.Context, username string, secret *v1.
 	}
 
 	secret.Username = username
-	secret.SecretID = util.RandString(secretLen)
-	secret.SecretKey = util.RandString(secretLen)
+	secret.SecretID = util.RandString(secretIDLen)
+	secret.SecretKey = util.RandString(secretKeyLen)
 	if secret.Name == "" {
 		secret.Name = secret.SecretID
 	}
