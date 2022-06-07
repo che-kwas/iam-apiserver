@@ -13,13 +13,13 @@ DCURL="curl -s -XDELETE" # Delete
 test::admin_login()
 {
   basicToken="-HAuthorization: Basic Y2hlOmNoZS1rd2FzLmdpdGVlLmlv"
-  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
+  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po 'token[" :]+\K[^"]+'
 }
 
 test::tom_login()
 {
   basicToken="-HAuthorization: Basic dG9tOnRvbXRvbQ=="
-  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po '(?<=token":")(.+)(?=")'
+  ${CCURL} "${basicToken}" http://${SERVER_ADDR}/login | grep -Po 'token[" :]+\K[^"]+'
 }
 
 test::user()
