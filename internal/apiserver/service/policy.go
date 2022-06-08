@@ -31,6 +31,10 @@ func newPolicies(srv *service) *policyService {
 
 func (s *policyService) Create(ctx context.Context, username string, policy *v1.Policy) error {
 	policy.Username = username
+	if policy.Policy.ID == "" {
+		policy.Policy.ID = policy.Name
+	}
+
 	return s.store.Policies().Create(ctx, policy)
 }
 
@@ -46,6 +50,10 @@ func (s *policyService) Update(ctx context.Context, username string, name string
 
 	policy.Policy = params.Policy
 	policy.Extend = params.Extend
+	if policy.Policy.ID == "" {
+		policy.Policy.ID = policy.Name
+	}
+
 	return s.store.Policies().Update(ctx, policy)
 }
 
