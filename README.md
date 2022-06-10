@@ -58,3 +58,5 @@
 
 - swagger
 - test
+- README
+- CI
