@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/che-kwas/iam-kit/mysql"
-	"github.com/marmotedu/errors"
 	"gorm.io/gorm"
 
 	v1 "iam-apiserver/api/apiserver/v1"
@@ -31,7 +30,7 @@ func (ds *datastore) Policies() store.PolicyStore {
 func (ds *datastore) Close() error {
 	db, err := ds.db.DB()
 	if err != nil {
-		return errors.Wrap(err, "get gorm db instance failed")
+		return err
 	}
 
 	return db.Close()
@@ -56,7 +55,7 @@ func MySQLStore() (store.Store, error) {
 	})
 
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to connect to mysql")
+		return nil, err
 	}
 
 	autoMigrate(dbIns)
@@ -67,13 +66,13 @@ func MySQLStore() (store.Store, error) {
 // nolint:unused
 func autoMigrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(&v1.User{}); err != nil {
-		return errors.Wrap(err, "migrate user model failed")
+		return err
 	}
 	if err := db.AutoMigrate(&v1.Policy{}); err != nil {
-		return errors.Wrap(err, "migrate policy model failed")
+		return err
 	}
 	if err := db.AutoMigrate(&v1.Secret{}); err != nil {
-		return errors.Wrap(err, "migrate secret model failed")
+		return err
 	}
 
 	return nil
