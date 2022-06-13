@@ -34,7 +34,7 @@ func NewServer(name string) *apiServer {
 // Run runs the apiServer.
 func (s *apiServer) Run() {
 	if s.err != nil {
-		s.log.Fatal("failed to build the server: ", s.err)
+		s.log.Fatal(s.err)
 	}
 
 	defer s.log.Sync()
@@ -42,7 +42,7 @@ func (s *apiServer) Run() {
 	defer publisher.Client().Close()
 
 	if err := s.Server.Run(); err != nil {
-		s.log.Fatal("server stopped unexpectedly: ", err)
+		s.log.Fatal(err)
 	}
 }
 
