@@ -7,6 +7,8 @@ import (
 
 	pb "iam-apiserver/api/apiserver/proto/v1"
 	"iam-apiserver/internal/apiserver/controller/cache"
+	"iam-apiserver/internal/apiserver/publisher"
+	"iam-apiserver/internal/apiserver/publisher/redis"
 	"iam-apiserver/internal/apiserver/store"
 	"iam-apiserver/internal/apiserver/store/mysql"
 )
@@ -26,19 +28,18 @@ func NewServer(name string) *apiServer {
 		log:  logger.L(),
 	}
 
-	return s.initStore().newServer().setupHTTP().setupGRPC()
+	return s.initStore().initPublisher().newServer().setupHTTP().setupGRPC()
 }
 
 // Run runs the apiServer.
 func (s *apiServer) Run() {
-	defer s.log.Sync()
-	if cli := store.Client(); cli != nil {
-		defer cli.Close()
-	}
-
 	if s.err != nil {
 		s.log.Fatal("failed to build the server: ", s.err)
 	}
+
+	defer s.log.Sync()
+	defer store.Client().Close()
+	defer publisher.Client().Close()
 
 	if err := s.Server.Run(); err != nil {
 		s.log.Fatal("server stopped unexpectedly: ", err)
@@ -46,11 +47,25 @@ func (s *apiServer) Run() {
 }
 
 func (s *apiServer) initStore() *apiServer {
-	var storeIns store.Store
-	if storeIns, s.err = mysql.MySQLStore(); s.err != nil {
+	var cli store.Store
+	if cli, s.err = mysql.MySQLStore(); s.err != nil {
 		return s
 	}
-	store.SetClient(storeIns)
+	store.SetClient(cli)
+
+	return s
+}
+
+func (s *apiServer) initPublisher() *apiServer {
+	if s.err != nil {
+		return s
+	}
+
+	var cli publisher.Publisher
+	if cli, s.err = redis.NewRedisPub(); s.err != nil {
+		return s
+	}
+	publisher.SetClient(cli)
 
 	return s
 }

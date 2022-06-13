@@ -14,7 +14,6 @@ import (
 	"iam-apiserver/internal/apiserver/controller/secret"
 	"iam-apiserver/internal/apiserver/controller/user"
 	"iam-apiserver/internal/apiserver/store"
-	mdw "iam-apiserver/internal/pkg/middleware"
 )
 
 func initRouter(g *gin.Engine) {
@@ -46,7 +45,7 @@ func initRouter(g *gin.Engine) {
 
 		v1.Use(auto.AuthFunc())
 
-		secretv1 := v1.Group("/secrets", mdw.Publish())
+		secretv1 := v1.Group("/secrets", Publish())
 		{
 			secretController := secret.NewSecretController()
 
@@ -58,7 +57,7 @@ func initRouter(g *gin.Engine) {
 			secretv1.GET("", secretController.List)
 		}
 
-		policyv1 := v1.Group("/policies", mdw.Publish())
+		policyv1 := v1.Group("/policies", Publish())
 		{
 			policyController := policy.NewPolicyController()
 

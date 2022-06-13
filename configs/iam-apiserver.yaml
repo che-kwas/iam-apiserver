@@ -30,7 +30,7 @@ redis:
   addrs: # 1个addr为单节点模式，多个addrs为cluster模式
     - "127.0.0.1:6379"
   password: "774411"
-  database: 0
+  database: 0,
 
 # https://pkg.go.dev/go.uber.org/zap#hdr-Configuring_Zap
 log:

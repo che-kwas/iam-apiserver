@@ -1,4 +1,4 @@
-package middleware
+package apiserver
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"github.com/che-kwas/iam-kit/logger"
 	"github.com/gin-gonic/gin"
 
-	"iam-apiserver/internal/pkg/redis"
+	"iam-apiserver/internal/apiserver/publisher"
 )
 
 // Redis pub/sub events.
@@ -32,7 +32,7 @@ func Publish() gin.HandlerFunc {
 			return
 		}
 
-		if err := redis.Client().Publish(c, channel, message).Err(); err != nil {
+		if err := publisher.Client().Publish(c, channel, message); err != nil {
 			logger.L().X(c).Errorw("publish", "error", err.Error())
 		}
 		logger.L().X(c).Debugw("publish", "message", message, "method", c.Request.Method)
