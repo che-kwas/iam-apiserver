@@ -48,7 +48,7 @@ func (s *apiServer) Run() {
 
 func (s *apiServer) initStore() *apiServer {
 	var cli store.Store
-	if cli, s.err = mysql.MySQLStore(); s.err != nil {
+	if cli, s.err = mysql.NewMySQLStore(); s.err != nil {
 		return s
 	}
 	store.SetClient(cli)

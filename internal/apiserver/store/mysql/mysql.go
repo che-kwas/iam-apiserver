@@ -2,8 +2,6 @@
 package mysql
 
 import (
-	"sync"
-
 	"github.com/che-kwas/iam-kit/mysql"
 	"gorm.io/gorm"
 
@@ -36,31 +34,16 @@ func (ds *datastore) Close() error {
 	return db.Close()
 }
 
-var (
-	mysqlStore store.Store
-	once       sync.Once
-)
-
-// MySQLStore returns a mysql store instance.
-func MySQLStore() (store.Store, error) {
-	if mysqlStore != nil {
-		return mysqlStore, nil
-	}
-
-	var err error
-	var dbIns *gorm.DB
-	once.Do(func() {
-		dbIns, err = mysql.NewMysqlIns()
-		mysqlStore = &datastore{dbIns}
-	})
-
+// NewMySQLStore returns a mysql store instance.
+func NewMySQLStore() (store.Store, error) {
+	dbIns, err := mysql.NewMysqlIns()
 	if err != nil {
 		return nil, err
 	}
 
 	autoMigrate(dbIns)
 
-	return mysqlStore, nil
+	return &datastore{dbIns}, nil
 }
 
 // nolint:unused
