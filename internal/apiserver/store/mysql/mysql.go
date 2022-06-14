@@ -2,6 +2,8 @@
 package mysql
 
 import (
+	"context"
+
 	"github.com/che-kwas/iam-kit/mysql"
 	"gorm.io/gorm"
 
@@ -25,7 +27,7 @@ func (ds *datastore) Policies() store.PolicyStore {
 	return newPolicies(ds)
 }
 
-func (ds *datastore) Close() error {
+func (ds *datastore) Close(ctx context.Context) error {
 	db, err := ds.db.DB()
 	if err != nil {
 		return err

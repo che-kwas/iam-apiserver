@@ -3,6 +3,7 @@ package apiserver
 import (
 	"github.com/che-kwas/iam-kit/logger"
 	"github.com/che-kwas/iam-kit/server"
+	"github.com/che-kwas/iam-kit/shutdown"
 	"google.golang.org/grpc/reflection"
 
 	pb "iam-apiserver/api/apiserver/proto/v1"
@@ -38,8 +39,6 @@ func (s *apiServer) Run() {
 	}
 
 	defer s.log.Sync()
-	defer store.Client().Close()
-	defer publisher.Pub().Close()
 
 	if err := s.Server.Run(); err != nil {
 		s.log.Fatal(err)
@@ -75,7 +74,13 @@ func (s *apiServer) newServer() *apiServer {
 		return s
 	}
 
-	s.Server, s.err = server.NewServer(s.name, server.WithGRPC())
+	s.Server, s.err = server.NewServer(
+		s.name,
+		server.WithGRPC(),
+		server.WithShutdown(shutdown.ShutdownFunc(store.Client().Close)),
+		server.WithShutdown(shutdown.ShutdownFunc(publisher.Pub().Close)),
+	)
+
 	return s
 }
 

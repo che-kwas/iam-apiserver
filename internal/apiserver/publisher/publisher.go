@@ -10,7 +10,7 @@ var pub Publisher
 // Publisher defines the behavior of a publisher.
 type Publisher interface {
 	Publish(ctx context.Context, channel string, message interface{}) error
-	Close() error
+	Close(ctx context.Context) error
 }
 
 // Pub returns the publisher pub.

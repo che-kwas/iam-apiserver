@@ -20,7 +20,7 @@ func (r *redisPub) Publish(ctx context.Context, channel string, message interfac
 	return r.cli.Publish(ctx, channel, message).Err()
 }
 
-func (r *redisPub) Close() error {
+func (r *redisPub) Close(ctx context.Context) error {
 	return r.cli.Close()
 }
 
