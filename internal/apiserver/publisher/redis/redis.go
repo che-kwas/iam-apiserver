@@ -14,6 +14,8 @@ type redisPub struct {
 	cli redis.UniversalClient
 }
 
+var _ publisher.Publisher = &redisPub{}
+
 func (r *redisPub) Publish(ctx context.Context, channel string, message interface{}) error {
 	return r.cli.Publish(ctx, channel, message).Err()
 }
