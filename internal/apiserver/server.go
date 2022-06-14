@@ -39,7 +39,7 @@ func (s *apiServer) Run() {
 
 	defer s.log.Sync()
 	defer store.Client().Close()
-	defer publisher.Client().Close()
+	defer publisher.Pub().Close()
 
 	if err := s.Server.Run(); err != nil {
 		s.log.Fatal(err)
@@ -61,11 +61,11 @@ func (s *apiServer) initPublisher() *apiServer {
 		return s
 	}
 
-	var cli publisher.Publisher
-	if cli, s.err = redis.NewRedisPub(); s.err != nil {
+	var pub publisher.Publisher
+	if pub, s.err = redis.NewRedisPub(); s.err != nil {
 		return s
 	}
-	publisher.SetClient(cli)
+	publisher.SetPub(pub)
 
 	return s
 }

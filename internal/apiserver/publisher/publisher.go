@@ -5,7 +5,7 @@ import "context"
 
 //go:generate mockgen -self_package=iam-apiserver/internal/apiserver/publisher -destination mock_publisher.go -package publisher iam-apiserver/internal/apiserver/publisher Publisher
 
-var client Publisher
+var pub Publisher
 
 // Publisher defines the behavior of a publisher.
 type Publisher interface {
@@ -13,12 +13,12 @@ type Publisher interface {
 	Close() error
 }
 
-// Client returns the publisher client.
-func Client() Publisher {
-	return client
+// Pub returns the publisher pub.
+func Pub() Publisher {
+	return pub
 }
 
-// SetClient sets the publisher client.
-func SetClient(publisher Publisher) {
-	client = publisher
+// SetPub sets the publisher pub.
+func SetPub(publisher Publisher) {
+	pub = publisher
 }

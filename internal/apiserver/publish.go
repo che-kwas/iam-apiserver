@@ -32,7 +32,7 @@ func Publish() gin.HandlerFunc {
 			return
 		}
 
-		if err := publisher.Client().Publish(c, channel, message); err != nil {
+		if err := publisher.Pub().Publish(c, channel, message); err != nil {
 			logger.L().X(c).Errorw("publish", "error", err.Error())
 		}
 		logger.L().X(c).Debugw("publish", "message", message, "method", c.Request.Method)
