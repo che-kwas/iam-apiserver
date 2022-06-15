@@ -30,7 +30,7 @@ lint: tools.verify.golangci-lint
 
 ## api: Generate api proto.
 .PHONY: api
-api:
+api: tools.verify.protoc tools.verify.protoc-gen-go tools.verify.protoc-gen-go-grpc
 	protoc --proto_path=$(PROTO_DIR) \
 	       --go_out=paths=source_relative:$(PROTO_DIR) \
 	       --go-grpc_out=paths=source_relative:$(PROTO_DIR) \

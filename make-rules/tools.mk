@@ -1,6 +1,6 @@
 # Makefile helper functions for tools
 
-TOOLS := golangci-lint mockgen codegen protoc-gen-go protoc-gen-go-grpc
+TOOLS := golangci-lint mockgen codegen protoc protoc-gen-go protoc-gen-go-grpc
 
 .PHONY: tools.verify
 tools.verify: $(addprefix tools.verify., $(TOOLS))
@@ -24,6 +24,10 @@ install.mockgen:
 .PHONY: install.codegen
 install.codegen:
 	go install github.com/che-kwas/iam-kit/tools/codegen@latest
+
+.PHONY: install.protoc
+install.protoc:
+	apt -y install protobuf-compiler
 
 .PHONY: install.protoc-gen-go
 install.protoc-gen-go:
