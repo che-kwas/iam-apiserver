@@ -27,7 +27,7 @@ install.codegen:
 
 .PHONY: install.protoc
 install.protoc:
-	apt -y install protobuf-compiler
+	sudo apt-get -y install protobuf-compiler
 
 .PHONY: install.protoc-gen-go
 install.protoc-gen-go:
