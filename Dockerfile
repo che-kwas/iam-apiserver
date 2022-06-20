@@ -22,8 +22,9 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
       && echo ${TZ} > /etc/timezone \
       && apk del tzdata
 
-COPY --from=build /iam-apiserver/* /
+COPY --from=build /iam-apiserver/iam-apiserver /opt/iam/bin/
+COPY --from=build /iam-apiserver/iam-apiserver.yaml /etc/iam/
 
 EXPOSE 8000 8001
-ENTRYPOINT [ "/iam-apiserver" ]
-CMD [ "-c", "/iam-apiserver.yaml" ]
+ENTRYPOINT [ "/opt/iam/bin/iam-apiserver" ]
+CMD [ "-c", "/etc/iam/iam-apiserver.yaml" ]
