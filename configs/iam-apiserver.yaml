@@ -16,7 +16,7 @@ jwt:
   max-refresh: 2h # token 更新时间(小时), 默认24h
 
 mysql:
-  addr: 127.0.0.1:3306 # 默认 127.0.0.1:3306
+  addr: localhost:3306 # 默认 localhost:3306
   username: che
   password: "774411"
   database: iam
@@ -27,8 +27,8 @@ mysql:
   log-level: 1 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 redis:
-  addrs: # 1个addr为单节点模式，多个addrs为cluster模式
-    - "127.0.0.1:6379"
+  addrs:
+    - "localhost:6379" # 默认 localhost:6379
   password: "774411"
   database: 0
 
